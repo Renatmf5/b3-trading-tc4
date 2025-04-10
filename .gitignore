@@ -5,3 +5,10 @@ venv/
 .dados
 dados/
 /dados/
+
+.vscode/
+vscode/
+.vscode
+
+
+.env

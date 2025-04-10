@@ -1,0 +1,330 @@
+0	31/12/2024	26/02/2025	PETR4	1	Ativo Total	1124797000.0
+1	31/12/2024	26/02/2025	PETR4	1.01	Ativo Circulante	135212000.0
+2	31/12/2024	26/02/2025	PETR4	1.01.01	Caixa e Equivalentes de Caixa	20254000.0
+3	31/12/2024	26/02/2025	PETR4	1.01.02	Aplicacoes Financeiras	26397000.0
+4	31/12/2024	26/02/2025	PETR4	1.01.02.01	Aplicacoes Financeiras Avaliadas a Valor Justo atraves do Resultado	
+5	31/12/2024	26/02/2025	PETR4	1.01.02.01.01	Titulos para Negociacao	
+6	31/12/2024	26/02/2025	PETR4	1.01.02.01.02	Titulos Designados a Valor Justo	
+7	31/12/2024	26/02/2025	PETR4	1.01.02.02	Aplicacoes Financeiras Avaliadas a Valor Justo atraves de Outros Resultados Abrangentes	
+8	31/12/2024	26/02/2025	PETR4	1.01.02.03	Aplicacoes Financeiras Avaliadas ao Custo Amortizado	
+9	31/12/2024	26/02/2025	PETR4	1.01.03	Contas a Receber	22080000.0
+10	31/12/2024	26/02/2025	PETR4	1.01.03.01	Clientes	
+11	31/12/2024	26/02/2025	PETR4	1.01.03.02	Outras Contas a Receber	
+12	31/12/2024	26/02/2025	PETR4	1.01.04	Estoques	41550000.0
+13	31/12/2024	26/02/2025	PETR4	1.01.05	Ativos Biologicos	
+14	31/12/2024	26/02/2025	PETR4	1.01.06	Tributos a Recuperar	12175000.0
+15	31/12/2024	26/02/2025	PETR4	1.01.06.01	Tributos Correntes a Recuperar	12175000.0
+16	31/12/2024	26/02/2025	PETR4	1.01.06.01.01	Imposto de renda e contribuicao social	2545000.0
+17	31/12/2024	26/02/2025	PETR4	1.01.06.01.02	Impostos e contribuicoes	9630000.0
+18	31/12/2024	26/02/2025	PETR4	1.01.07	Despesas Antecipadas	
+19	31/12/2024	26/02/2025	PETR4	1.01.08	Outros Ativos Circulantes	12756000.0
+20	31/12/2024	26/02/2025	PETR4	1.01.08.01	Ativos Nao-Correntes a Venda	3157000.0
+21	31/12/2024	26/02/2025	PETR4	1.01.08.02	Ativos de Operacoes Descontinuadas	
+22	31/12/2024	26/02/2025	PETR4	1.01.08.03	Outros	9599000.0
+23	31/12/2024	26/02/2025	PETR4	1.01.08.03.01	Depositos Vinculados a Class Action	
+24	31/12/2024	26/02/2025	PETR4	1.01.08.03.02	Adiantamento a fornecedores	
+25	31/12/2024	26/02/2025	PETR4	1.01.08.03.03	Outros ativos	9599000.0
+26	31/12/2024	26/02/2025	PETR4	1.02	Ativo Nao Circulante	989585000.0
+27	31/12/2024	26/02/2025	PETR4	1.02.01	Ativo Realizavel a Longo Prazo	127626000.0
+28	31/12/2024	26/02/2025	PETR4	1.02.01.01	Aplicacoes Financeiras Avaliadas a Valor Justo atraves do Resultado	
+29	31/12/2024	26/02/2025	PETR4	1.02.01.01.01	Titulos Designados a Valor Justo	
+30	31/12/2024	26/02/2025	PETR4	1.02.01.02	Aplicacoes Financeiras Avaliadas a Valor Justo atraves de Outros Resultados Abrangentes	
+31	31/12/2024	26/02/2025	PETR4	1.02.01.03	Aplicacoes Financeiras Avaliadas ao Custo Amortizado	3605000.0
+32	31/12/2024	26/02/2025	PETR4	1.02.01.04	Contas a Receber	7777000.0
+33	31/12/2024	26/02/2025	PETR4	1.02.01.04.01	Clientes	
+34	31/12/2024	26/02/2025	PETR4	1.02.01.04.02	Outras Contas a Receber	
+35	31/12/2024	26/02/2025	PETR4	1.02.01.05	Estoques	
+36	31/12/2024	26/02/2025	PETR4	1.02.01.06	Ativos Biologicos	
+37	31/12/2024	26/02/2025	PETR4	1.02.01.07	Tributos Diferidos	28011000.0
+38	31/12/2024	26/02/2025	PETR4	1.02.01.07.01	Imposto de renda e contribuicao social diferidos	5710000.0
+39	31/12/2024	26/02/2025	PETR4	1.02.01.07.02	Impostos e contribuicoes	22301000.0
+40	31/12/2024	26/02/2025	PETR4	1.02.01.08	Despesas Antecipadas	
+41	31/12/2024	26/02/2025	PETR4	1.02.01.09	Creditos com Partes Relacionadas	
+42	31/12/2024	26/02/2025	PETR4	1.02.01.09.01	Creditos com Coligadas	
+43	31/12/2024	26/02/2025	PETR4	1.02.01.09.03	Creditos com Controladores	
+44	31/12/2024	26/02/2025	PETR4	1.02.01.09.04	Creditos com Outras Partes Relacionadas	
+45	31/12/2024	26/02/2025	PETR4	1.02.01.10	Outros Ativos Nao Circulantes	88233000.0
+46	31/12/2024	26/02/2025	PETR4	1.02.01.10.01	Ativos Nao-Correntes a Venda	
+47	31/12/2024	26/02/2025	PETR4	1.02.01.10.02	Ativos de Operacoes Descontinuadas	
+48	31/12/2024	26/02/2025	PETR4	1.02.01.10.03	Adiantamento a fornecedores	
+49	31/12/2024	26/02/2025	PETR4	1.02.01.10.04	Depositos judiciais	72745000.0
+50	31/12/2024	26/02/2025	PETR4	1.02.01.10.05	Outros ativos	15488000.0
+51	31/12/2024	26/02/2025	PETR4	1.02.02	Investimentos	4081000.0
+52	31/12/2024	26/02/2025	PETR4	1.02.02.01	Participacoes Societarias	
+53	31/12/2024	26/02/2025	PETR4	1.02.02.01.01	Participacoes em Coligadas	
+54	31/12/2024	26/02/2025	PETR4	1.02.02.01.04	Participacoes em Controladas em Conjunto	
+55	31/12/2024	26/02/2025	PETR4	1.02.02.01.05	Outros Investimentos	
+56	31/12/2024	26/02/2025	PETR4	1.02.02.02	Propriedades para Investimento	
+57	31/12/2024	26/02/2025	PETR4	1.02.03	Imobilizado	843917000.0
+58	31/12/2024	26/02/2025	PETR4	1.02.03.01	Imobilizado em Operacao	
+59	31/12/2024	26/02/2025	PETR4	1.02.03.02	Direito de Uso em Arrendamento	
+60	31/12/2024	26/02/2025	PETR4	1.02.03.03	Imobilizado em Andamento	
+61	31/12/2024	26/02/2025	PETR4	1.02.04	Intangivel	13961000.0
+62	31/12/2024	26/02/2025	PETR4	1.02.04.01	Intangiveis	
+63	31/12/2024	26/02/2025	PETR4	1.02.04.01.01	Contrato de Concessao	
+64	31/12/2024	26/02/2025	PETR4	1.02.04.02	Goodwill	
+65	31/12/2024	26/02/2025	PETR4	3.01	Receita de Venda de Bens e/ou Servicos	490829000.0
+66	31/12/2024	26/02/2025	PETR4	3.02	Custo dos Bens e/ou Servicos Vendidos	-244367000.0
+67	31/12/2024	26/02/2025	PETR4	3.03	Resultado Bruto	246462000.0
+68	31/12/2024	26/02/2025	PETR4	3.04	Despesas/Receitas Operacionais	-109261000.0
+69	31/12/2024	26/02/2025	PETR4	3.04.01	Despesas com Vendas	-26134000.0
+70	31/12/2024	26/02/2025	PETR4	3.04.02	Despesas Gerais e Administrativas	-9931000.0
+71	31/12/2024	26/02/2025	PETR4	3.04.03	Perdas pela Nao Recuperabilidade de Ativos	
+72	31/12/2024	26/02/2025	PETR4	3.04.04	Outras Receitas Operacionais	
+73	31/12/2024	26/02/2025	PETR4	3.04.05	Outras Despesas Operacionais	-69729000.0
+74	31/12/2024	26/02/2025	PETR4	3.04.05.01	Tributarias	-6708000.0
+75	31/12/2024	26/02/2025	PETR4	3.04.05.02	Custos com pesquisa e desenvolvimento tecnologico	-4281000.0
+76	31/12/2024	26/02/2025	PETR4	3.04.05.03	Custos exploratorios para extracao de petroleo e gas	-4997000.0
+77	31/12/2024	26/02/2025	PETR4	3.04.05.04	Participacao nos Lucros ou Resultados	
+78	31/12/2024	26/02/2025	PETR4	3.04.05.05	Outras receitas (despesas) operacionais liquidas	-44372000.0
+79	31/12/2024	26/02/2025	PETR4	3.04.05.06	Baixa de gastos adicionais capitalizados indevidamente	
+80	31/12/2024	26/02/2025	PETR4	3.04.05.07	Perda, liquida, no valor de recuperacao de ativos - Impairment	-9371000.0
+81	31/12/2024	26/02/2025	PETR4	3.04.06	Resultado de Equivalencia Patrimonial	-3467000.0
+82	31/12/2024	26/02/2025	PETR4	3.05	Resultado Antes do Resultado Financeiro e dos Tributos	137201000.0
+83	31/12/2024	26/02/2025	PETR4	3.06	Resultado Financeiro	-82471000.0
+84	31/12/2024	26/02/2025	PETR4	3.06.01	Receitas Financeiras	10488000.0
+85	31/12/2024	26/02/2025	PETR4	3.06.01.01	Receitas financeiras	10488000.0
+86	31/12/2024	26/02/2025	PETR4	3.06.01.02	Variacoes Monetarias e Cambiais Liquidas	
+87	31/12/2024	26/02/2025	PETR4	3.06.02	Despesas Financeiras	-92959000.0
+88	31/12/2024	26/02/2025	PETR4	3.06.02.01	Despesas financeiras	-32093000.0
+89	31/12/2024	26/02/2025	PETR4	3.06.02.02	Variacoes monetarias e cambiais, liquidas	-60866000.0
+90	31/12/2024	26/02/2025	PETR4	3.07	Resultado Antes dos Tributos sobre o Lucro	54730000.0
+91	31/12/2024	26/02/2025	PETR4	3.08	Imposto de Renda e Contribuicao Social sobre o Lucro	-17721000.0
+92	31/12/2024	26/02/2025	PETR4	3.08.01	Corrente	-40824000.0
+93	31/12/2024	26/02/2025	PETR4	3.08.02	Diferido	23103000.0
+94	31/12/2024	26/02/2025	PETR4	3.09	Resultado Liquido das Operacoes Continuadas	37009000.0
+95	31/12/2024	26/02/2025	PETR4	3.10	Resultado Liquido de Operacoes Descontinuadas	
+96	31/12/2024	26/02/2025	PETR4	3.10.01	Lucro/Prejuizo Liquido das Operacoes Descontinuadas	
+97	31/12/2024	26/02/2025	PETR4	3.10.02	Ganhos/Perdas Liquidas sobre Ativos de Operacoes Descontinuadas	
+98	31/12/2024	26/02/2025	PETR4	3.11	Lucro/Prejuizo Consolidado do Periodo	37009000.0
+99	31/12/2024	26/02/2025	PETR4	3.11.01	Atribuido a Socios da Empresa Controladora	36606000.0
+100	31/12/2024	26/02/2025	PETR4	3.11.02	Atribuido a Socios Nao Controladores	403000.0
+101	31/12/2024	26/02/2025	PETR4	3.99	Lucro por Acao - (Reais / Acao)	
+102	31/12/2024	26/02/2025	PETR4	3.99.01	Lucro Basico por Acao	
+103	31/12/2024	26/02/2025	PETR4	3.99.01.01	ON	2.84
+104	31/12/2024	26/02/2025	PETR4	3.99.01.02	PN	2.84
+105	31/12/2024	26/02/2025	PETR4	3.99.02	Lucro Diluido por Acao	
+106	31/12/2024	26/02/2025	PETR4	3.99.02.01	ON	2.84
+107	31/12/2024	26/02/2025	PETR4	3.99.02.02	PN	2.84
+108	31/12/2024	26/02/2025	PETR4	2	Passivo Total	1124797000.0
+109	31/12/2024	26/02/2025	PETR4	2.01	Passivo Circulante	194808000.0
+110	31/12/2024	26/02/2025	PETR4	2.01.01	Obrigacoes Sociais e Trabalhistas	9336000.0
+111	31/12/2024	26/02/2025	PETR4	2.01.01.01	Obrigacoes Sociais	
+112	31/12/2024	26/02/2025	PETR4	2.01.01.02	Obrigacoes Trabalhistas	
+113	31/12/2024	26/02/2025	PETR4	2.01.02	Fornecedores	37659000.0
+114	31/12/2024	26/02/2025	PETR4	2.01.02.01	Fornecedores Nacionais	
+115	31/12/2024	26/02/2025	PETR4	2.01.02.02	Fornecedores Estrangeiros	
+116	31/12/2024	26/02/2025	PETR4	2.01.03	Obrigacoes Fiscais	8671000.0
+117	31/12/2024	26/02/2025	PETR4	2.01.03.01	Obrigacoes Fiscais Federais	8671000.0
+118	31/12/2024	26/02/2025	PETR4	2.01.03.01.01	Imposto de Renda e Contribuicao Social a Pagar	8671000.0
+119	31/12/2024	26/02/2025	PETR4	2.01.03.02	Obrigacoes Fiscais Estaduais	
+120	31/12/2024	26/02/2025	PETR4	2.01.03.03	Obrigacoes Fiscais Municipais	
+121	31/12/2024	26/02/2025	PETR4	2.01.04	Emprestimos e Financiamentos	68783000.0
+122	31/12/2024	26/02/2025	PETR4	2.01.04.01	Emprestimos e Financiamentos	15887000.0
+123	31/12/2024	26/02/2025	PETR4	2.01.04.01.01	Em Moeda Nacional	
+124	31/12/2024	26/02/2025	PETR4	2.01.04.01.02	Em Moeda Estrangeira	
+125	31/12/2024	26/02/2025	PETR4	2.01.04.02	Debentures	
+126	31/12/2024	26/02/2025	PETR4	2.01.04.03	Financiamento por Arrendamento	52896000.0
+127	31/12/2024	26/02/2025	PETR4	2.01.05	Outras Obrigacoes	50440000.0
+128	31/12/2024	26/02/2025	PETR4	2.01.05.01	Passivos com Partes Relacionadas	
+129	31/12/2024	26/02/2025	PETR4	2.01.05.01.01	Debitos com Coligadas	
+130	31/12/2024	26/02/2025	PETR4	2.01.05.01.03	Debitos com Controladores	
+131	31/12/2024	26/02/2025	PETR4	2.01.05.01.04	Debitos com Outras Partes Relacionadas	
+132	31/12/2024	26/02/2025	PETR4	2.01.05.02	Outros	50440000.0
+133	31/12/2024	26/02/2025	PETR4	2.01.05.02.01	Dividendos e JCP a Pagar	16452000.0
+134	31/12/2024	26/02/2025	PETR4	2.01.05.02.02	Dividendo Minimo Obrigatorio a Pagar	
+135	31/12/2024	26/02/2025	PETR4	2.01.05.02.03	Obrigacoes por Pagamentos Baseados em Acoes	
+136	31/12/2024	26/02/2025	PETR4	2.01.05.02.04	Impostos e contribuicoes	20336000.0
+137	31/12/2024	26/02/2025	PETR4	2.01.05.02.05	Acordo com autoridades norte americanas	
+138	31/12/2024	26/02/2025	PETR4	2.01.05.02.06	Outros passivos	13652000.0
+139	31/12/2024	26/02/2025	PETR4	2.01.06	Provisoes	15501000.0
+140	31/12/2024	26/02/2025	PETR4	2.01.06.01	Provisoes Fiscais Previdenciarias Trabalhistas e Civeis	
+141	31/12/2024	26/02/2025	PETR4	2.01.06.01.01	Provisoes Fiscais	
+142	31/12/2024	26/02/2025	PETR4	2.01.06.01.02	Provisoes Previdenciarias e Trabalhistas	
+143	31/12/2024	26/02/2025	PETR4	2.01.06.01.03	Provisoes para Beneficios a Empregados	
+144	31/12/2024	26/02/2025	PETR4	2.01.06.01.04	Provisoes Civeis	
+145	31/12/2024	26/02/2025	PETR4	2.01.06.02	Outras Provisoes	15501000.0
+146	31/12/2024	26/02/2025	PETR4	2.01.06.02.01	Provisoes para Garantias	
+147	31/12/2024	26/02/2025	PETR4	2.01.06.02.02	Provisoes para Reestruturacao	
+148	31/12/2024	26/02/2025	PETR4	2.01.06.02.03	Provisoes para Passivos Ambientais e de Desativacao	
+149	31/12/2024	26/02/2025	PETR4	2.01.06.02.04	Plano de pensao e de saude	5001000.0
+150	31/12/2024	26/02/2025	PETR4	2.01.06.02.05	Provisao para desmantelamento de areas	10500000.0
+151	31/12/2024	26/02/2025	PETR4	2.01.07	Passivos sobre Ativos Nao-Correntes a Venda e Descontinuados	4418000.0
+152	31/12/2024	26/02/2025	PETR4	2.01.07.01	Passivos sobre Ativos Nao-Correntes a Venda	4418000.0
+153	31/12/2024	26/02/2025	PETR4	2.01.07.02	Passivos sobre Ativos de Operacoes Descontinuadas	
+154	31/12/2024	26/02/2025	PETR4	2.02	Passivo Nao Circulante	562475000.0
+155	31/12/2024	26/02/2025	PETR4	2.02.01	Emprestimos e Financiamentos	304684000.0
+156	31/12/2024	26/02/2025	PETR4	2.02.01.01	Emprestimos e Financiamentos	127539000.0
+157	31/12/2024	26/02/2025	PETR4	2.02.01.01.01	Em Moeda Nacional	
+158	31/12/2024	26/02/2025	PETR4	2.02.01.01.02	Em Moeda Estrangeira	
+159	31/12/2024	26/02/2025	PETR4	2.02.01.02	Debentures	
+160	31/12/2024	26/02/2025	PETR4	2.02.01.03	Financiamento por Arrendamento	177145000.0
+161	31/12/2024	26/02/2025	PETR4	2.02.02	Outras Obrigacoes	3284000.0
+162	31/12/2024	26/02/2025	PETR4	2.02.02.01	Passivos com Partes Relacionadas	
+163	31/12/2024	26/02/2025	PETR4	2.02.02.01.01	Debitos com Coligadas	
+164	31/12/2024	26/02/2025	PETR4	2.02.02.01.03	Debitos com Controladores	
+165	31/12/2024	26/02/2025	PETR4	2.02.02.01.04	Debitos com Outras Partes Relacionadas	
+166	31/12/2024	26/02/2025	PETR4	2.02.02.02	Outros	3284000.0
+167	31/12/2024	26/02/2025	PETR4	2.02.02.02.01	Obrigacoes por Pagamentos Baseados em Acoes	
+168	31/12/2024	26/02/2025	PETR4	2.02.02.02.02	Adiantamento para Futuro Aumento de Capital	
+169	31/12/2024	26/02/2025	PETR4	2.02.02.02.03	Imposto de renda e contribuicao social	3284000.0
+170	31/12/2024	26/02/2025	PETR4	2.02.03	Tributos Diferidos	9100000.0
+171	31/12/2024	26/02/2025	PETR4	2.02.03.01	Imposto de Renda e Contribuicao Social Diferidos	9100000.0
+172	31/12/2024	26/02/2025	PETR4	2.02.04	Provisoes	245407000.0
+173	31/12/2024	26/02/2025	PETR4	2.02.04.01	Provisoes Fiscais Previdenciarias Trabalhistas e Civeis	17543000.0
+174	31/12/2024	26/02/2025	PETR4	2.02.04.01.01	Provisoes Fiscais	
+175	31/12/2024	26/02/2025	PETR4	2.02.04.01.02	Provisoes Previdenciarias e Trabalhistas	
+176	31/12/2024	26/02/2025	PETR4	2.02.04.01.03	Provisoes para Beneficios a Empregados	
+177	31/12/2024	26/02/2025	PETR4	2.02.04.01.04	Provisoes Civeis	
+178	31/12/2024	26/02/2025	PETR4	2.02.04.02	Outras Provisoes	227864000.0
+179	31/12/2024	26/02/2025	PETR4	2.02.04.02.01	Provisoes para Garantias	
+180	31/12/2024	26/02/2025	PETR4	2.02.04.02.02	Provisoes para Reestruturacao	
+181	31/12/2024	26/02/2025	PETR4	2.02.04.02.03	Provisoes para Passivos Ambientais e de Desativacao	
+182	31/12/2024	26/02/2025	PETR4	2.02.04.02.04	Plano de pensao e de saude	65576000.0
+183	31/12/2024	26/02/2025	PETR4	2.02.04.02.05	Provisao para desmantelamento de areas	151753000.0
+184	31/12/2024	26/02/2025	PETR4	2.02.04.02.06	Salarios, ferias, encargos e participacoes	506000.0
+185	31/12/2024	26/02/2025	PETR4	2.02.04.02.07	Outros passivos	10029000.0
+186	31/12/2024	26/02/2025	PETR4	2.02.05	Passivos sobre Ativos Nao-Correntes a Venda e Descontinuados	
+187	31/12/2024	26/02/2025	PETR4	2.02.05.01	Passivos sobre Ativos Nao-Correntes a Venda	
+188	31/12/2024	26/02/2025	PETR4	2.02.05.02	Passivos sobre Ativos de Operacoes Descontinuadas	
+189	31/12/2024	26/02/2025	PETR4	2.02.06	Lucros e Receitas a Apropriar	
+190	31/12/2024	26/02/2025	PETR4	2.02.06.01	Lucros a Apropriar	
+191	31/12/2024	26/02/2025	PETR4	2.02.06.02	Receitas a Apropriar	
+192	31/12/2024	26/02/2025	PETR4	2.02.06.03	Subvencoes de Investimento a Apropriar	
+193	31/12/2024	26/02/2025	PETR4	2.03	Patrimonio Liquido Consolidado	367514000.0
+194	31/12/2024	26/02/2025	PETR4	2.03.01	Capital Social Realizado	205432000.0
+195	31/12/2024	26/02/2025	PETR4	2.03.02	Reservas de Capital	-2457000.0
+196	31/12/2024	26/02/2025	PETR4	2.03.02.01	Agio na Emissao de Acoes	
+197	31/12/2024	26/02/2025	PETR4	2.03.02.02	Reserva Especial de Agio na Incorporacao	
+198	31/12/2024	26/02/2025	PETR4	2.03.02.03	Alienacao de Bonus de Subscricao	
+199	31/12/2024	26/02/2025	PETR4	2.03.02.04	Opcoes Outorgadas	
+200	31/12/2024	26/02/2025	PETR4	2.03.02.05	Acoes em Tesouraria	
+201	31/12/2024	26/02/2025	PETR4	2.03.02.06	Adiantamento para Futuro Aumento de Capital	
+202	31/12/2024	26/02/2025	PETR4	2.03.03	Reservas de Reavaliacao	
+203	31/12/2024	26/02/2025	PETR4	2.03.04	Reservas de Lucros	95193000.0
+204	31/12/2024	26/02/2025	PETR4	2.03.04.01	Reserva Legal	
+205	31/12/2024	26/02/2025	PETR4	2.03.04.02	Reserva Estatutaria	
+206	31/12/2024	26/02/2025	PETR4	2.03.04.03	Reserva para Contingencias	
+207	31/12/2024	26/02/2025	PETR4	2.03.04.04	Reserva de Lucros a Realizar	
+208	31/12/2024	26/02/2025	PETR4	2.03.04.05	Reserva de Retencao de Lucros	
+209	31/12/2024	26/02/2025	PETR4	2.03.04.06	Reserva Especial para Dividendos Nao Distribuidos	
+210	31/12/2024	26/02/2025	PETR4	2.03.04.07	Reserva de Incentivos Fiscais	
+211	31/12/2024	26/02/2025	PETR4	2.03.04.08	Dividendo Adicional Proposto	
+212	31/12/2024	26/02/2025	PETR4	2.03.04.09	Acoes em Tesouraria	
+213	31/12/2024	26/02/2025	PETR4	2.03.05	Lucros/Prejuizos Acumulados	
+214	31/12/2024	26/02/2025	PETR4	2.03.06	Ajustes de Avaliacao Patrimonial	
+215	31/12/2024	26/02/2025	PETR4	2.03.07	Ajustes Acumulados de Conversao	
+216	31/12/2024	26/02/2025	PETR4	2.03.08	Outros Resultados Abrangentes	67838000.0
+217	31/12/2024	26/02/2025	PETR4	2.03.09	Participacao dos Acionistas Nao Controladores	1508000.0
+218	31/12/2024	26/02/2025	PETR4	6.01	Caixa Liquido Atividades Operacionais	204037000.0
+219	31/12/2024	26/02/2025	PETR4	6.01.01	Caixa Gerado nas Operacoes	260414000.0
+220	31/12/2024	26/02/2025	PETR4	6.01.01.01	Lucro liquido do exercicio	37009000.0
+221	31/12/2024	26/02/2025	PETR4	6.01.01.02	Resultado atuarial de planos de pensao e saude	15788000.0
+222	31/12/2024	26/02/2025	PETR4	6.01.01.03	Resultado de participacoes em investidas por equivalencia patrimonial	3467000.0
+223	31/12/2024	26/02/2025	PETR4	6.01.01.04	Depreciacao, deplecao e amortizacao	67033000.0
+224	31/12/2024	26/02/2025	PETR4	6.01.01.05	Perda, liquida, no valor de recuperacao de ativos - Impairment	9371000.0
+225	31/12/2024	26/02/2025	PETR4	6.01.01.06	Baixa de pocos	2654000.0
+226	31/12/2024	26/02/2025	PETR4	6.01.01.07	Perdas com processos judiciais, administrativos e arbitrais	5395000.0
+227	31/12/2024	26/02/2025	PETR4	6.01.01.08	Variacoes cambiais,monetarias e encargos financeiros nao realizados	84138000.0
+228	31/12/2024	26/02/2025	PETR4	6.01.01.09	Imposto de renda e contrib. soc. dif. liquidos	
+229	31/12/2024	26/02/2025	PETR4	6.01.01.10	Perdas, liquidas, de credito esperadas	1536000.0
+230	31/12/2024	26/02/2025	PETR4	6.01.01.11	Ajuste a valor realizavel liquido	-214000.0
+231	31/12/2024	26/02/2025	PETR4	6.01.01.12	Realizacao do ajuste acumulado de conversao e outros resultados abrangentes	
+232	31/12/2024	26/02/2025	PETR4	6.01.01.13	Revisao e atualizacao financeira de desmantelamento de areas	21107000.0
+233	31/12/2024	26/02/2025	PETR4	6.01.01.14	Realizacao do Hedge de Fluxo de Caixa por venda de participacao societaria	
+234	31/12/2024	26/02/2025	PETR4	6.01.01.15	Imposto de renda e contribuicao social	17721000.0
+235	31/12/2024	26/02/2025	PETR4	6.01.01.16	Resultado com acordo de coparticipacao em areas licitadas	-1482000.0
+236	31/12/2024	26/02/2025	PETR4	6.01.01.17	Resultado com alienacoes e baixa de ativos	-1171000.0
+237	31/12/2024	26/02/2025	PETR4	6.01.01.18	Recuperacao de PIS e COFINS - Exclusao de ICMS na base de calculo	
+238	31/12/2024	26/02/2025	PETR4	6.01.01.19	Encerramento antecipado e alteracoes em pagamentos de contratos de arrendamento	-1938000.0
+239	31/12/2024	26/02/2025	PETR4	6.01.01.20	Assuncao de participacao em concessoes	
+240	31/12/2024	26/02/2025	PETR4	6.01.02	Variacoes nos Ativos e Passivos	-19977000.0
+241	31/12/2024	26/02/2025	PETR4	6.01.02.01	Contas a receber	9207000.0
+242	31/12/2024	26/02/2025	PETR4	6.01.02.02	Estoques	-1560000.0
+243	31/12/2024	26/02/2025	PETR4	6.01.02.03	Depositos judiciais	1295000.0
+244	31/12/2024	26/02/2025	PETR4	6.01.02.04	Depositos vinculados a Class Action	
+245	31/12/2024	26/02/2025	PETR4	6.01.02.05	Outros ativos	-1020000.0
+246	31/12/2024	26/02/2025	PETR4	6.01.02.06	Fornecedores	5517000.0
+247	31/12/2024	26/02/2025	PETR4	6.01.02.07	Impostos e contribuicoes	-15803000.0
+248	31/12/2024	26/02/2025	PETR4	6.01.02.08	Planos de pensao e de saude	-5408000.0
+249	31/12/2024	26/02/2025	PETR4	6.01.02.09	Provisao para processos judiciais e administrativos	-2554000.0
+250	31/12/2024	26/02/2025	PETR4	6.01.02.10	Outros beneficios a empregados	-480000.0
+251	31/12/2024	26/02/2025	PETR4	6.01.02.11	Ganhos/perdas na remensuracao - Participacoes societarias	
+252	31/12/2024	26/02/2025	PETR4	6.01.02.12	Provisao para desmantelamento de areas	-5275000.0
+253	31/12/2024	26/02/2025	PETR4	6.01.02.13	Acordo com autoridades norte americanas	
+254	31/12/2024	26/02/2025	PETR4	6.01.02.14	Outros passivos	-3896000.0
+255	31/12/2024	26/02/2025	PETR4	6.01.02.15	Operacoes descontinuadas-Recursos liquidos gerados pelas atividades operacionais	
+256	31/12/2024	26/02/2025	PETR4	6.01.03	Outros	-36400000.0
+257	31/12/2024	26/02/2025	PETR4	6.01.03.01	Imposto de renda e contribuicao social pagos	-36400000.0
+258	31/12/2024	26/02/2025	PETR4	6.02	Caixa Liquido Atividades de Investimento	-72363000.0
+259	31/12/2024	26/02/2025	PETR4	6.02.01	Aquisicoes de ativos imobilizados e intangiveis	-79856000.0
+260	31/12/2024	26/02/2025	PETR4	6.02.02	Reducoes (adicoes) em investimentos	-127000.0
+261	31/12/2024	26/02/2025	PETR4	6.02.03	Recebimentos pela venda de ativos - Desinvestimentos	4381000.0
+262	31/12/2024	26/02/2025	PETR4	6.02.04	(Investimentos) resgates em titulos e valores mobiliarios	501000.0
+263	31/12/2024	26/02/2025	PETR4	6.02.05	Dividendos recebidos	787000.0
+264	31/12/2024	26/02/2025	PETR4	6.02.06	Aquisicao de direito exploratorio do Excedente de Cessao Onerosa	
+265	31/12/2024	26/02/2025	PETR4	6.02.07	Revisao Cessao Onerosa	
+266	31/12/2024	26/02/2025	PETR4	6.02.08	Compensacao financeira por Acordos de Coparticipacao	1951000.0
+267	31/12/2024	26/02/2025	PETR4	6.02.09	Operacoes descontinuadas-Recursos liquidos gerados nas atividades de investimentos	
+268	31/12/2024	26/02/2025	PETR4	6.03	Caixa Liquido Atividades de Financiamento	-179974000.0
+269	31/12/2024	26/02/2025	PETR4	6.03.01	Participacao de acionistas nao controladores	-509000.0
+270	31/12/2024	26/02/2025	PETR4	6.03.02	Captacoes	12027000.0
+271	31/12/2024	26/02/2025	PETR4	6.03.03	Amortizacoes de principal - financiamentos	-35933000.0
+272	31/12/2024	26/02/2025	PETR4	6.03.04	Amortizacoes de juros - financiamentos	-10276000.0
+273	31/12/2024	26/02/2025	PETR4	6.03.05	Dividendos pagos a acionistas da Petrobras	-100305000.0
+274	31/12/2024	26/02/2025	PETR4	6.03.06	Dividendos pagos a acionistas nao controladores	-387000.0
+275	31/12/2024	26/02/2025	PETR4	6.03.07	Recebimentos pela venda de participacao acionaria sem perda de controle	
+276	31/12/2024	26/02/2025	PETR4	6.03.08	Amortizacoes de arrendamentos	-42672000.0
+277	31/12/2024	26/02/2025	PETR4	6.03.09	Operacoes descontinuadas-Recursos liquidos utilizados pelas atividades de financiamentos	
+278	31/12/2024	26/02/2025	PETR4	6.03.10	Recompra de acoes	-1919000.0
+279	31/12/2024	26/02/2025	PETR4	6.04	Variacao Cambial s/ Caixa e Equivalentes	6941000.0
+280	31/12/2024	26/02/2025	PETR4	6.05	Aumento (Reducao) de Caixa e Equivalentes	-41359000.0
+281	31/12/2024	26/02/2025	PETR4	6.05.01	Saldo Inicial de Caixa e Equivalentes	61613000.0
+282	31/12/2024	26/02/2025	PETR4	6.05.02	Saldo Final de Caixa e Equivalentes	20254000.0
+283	31/12/2024	26/02/2025	PETR4	7.01	Receitas	720591000.0
+284	31/12/2024	26/02/2025	PETR4	7.01.01	Vendas de Mercadorias, Produtos e Servicos	629354000.0
+285	31/12/2024	26/02/2025	PETR4	7.01.02	Outras Receitas	15157000.0
+286	31/12/2024	26/02/2025	PETR4	7.01.03	Receitas refs. a Construcao de Ativos Proprios	77616000.0
+287	31/12/2024	26/02/2025	PETR4	7.01.04	Provisao/Reversao de Creds. Liquidacao Duvidosa	-1536000.0
+288	31/12/2024	26/02/2025	PETR4	7.02	Insumos Adquiridos de Terceiros	-284259000.0
+289	31/12/2024	26/02/2025	PETR4	7.02.01	Custos Prods., Mercs. e Servs. Vendidos	-99730000.0
+290	31/12/2024	26/02/2025	PETR4	7.02.02	Materiais, Energia, Servs. de Terceiros e Outros	-135397000.0
+291	31/12/2024	26/02/2025	PETR4	7.02.03	Perda/Recuperacao de Valores Ativos	-9371000.0
+292	31/12/2024	26/02/2025	PETR4	7.02.04	Outros	-39761000.0
+293	31/12/2024	26/02/2025	PETR4	7.02.04.01	Creditos fiscais sobre insumos adquiridos de terceiros	-39761000.0
+294	31/12/2024	26/02/2025	PETR4	7.02.04.02	Ajuste a valor realizavel liquido	
+295	31/12/2024	26/02/2025	PETR4	7.02.04.03	Baixa de gastos adicionais capitalizados indevidamente	
+296	31/12/2024	26/02/2025	PETR4	7.03	Valor Adicionado Bruto	436332000.0
+297	31/12/2024	26/02/2025	PETR4	7.04	Retencoes	-67033000.0
+298	31/12/2024	26/02/2025	PETR4	7.04.01	Depreciacao, Amortizacao e Exaustao	-67033000.0
+299	31/12/2024	26/02/2025	PETR4	7.04.02	Outras	
+300	31/12/2024	26/02/2025	PETR4	7.05	Valor Adicionado Liquido Produzido	369299000.0
+301	31/12/2024	26/02/2025	PETR4	7.06	Vlr Adicionado Recebido em Transferencia	10123000.0
+302	31/12/2024	26/02/2025	PETR4	7.06.01	Resultado de Equivalencia Patrimonial	-3467000.0
+303	31/12/2024	26/02/2025	PETR4	7.06.02	Receitas Financeiras	10488000.0
+304	31/12/2024	26/02/2025	PETR4	7.06.03	Outros	3102000.0
+305	31/12/2024	26/02/2025	PETR4	7.06.03.01	Alugueis, royalties e outros	3102000.0
+306	31/12/2024	26/02/2025	PETR4	7.06.03.02	Valor adicionado total a distribuir das operacoes descontinuadas	
+307	31/12/2024	26/02/2025	PETR4	7.06.03.03	Recuperacao de PIS e COFINS - Exclusao de ICMS na base de calculo	
+308	31/12/2024	26/02/2025	PETR4	7.07	Valor Adicionado Total a Distribuir	379422000.0
+309	31/12/2024	26/02/2025	PETR4	7.08	Distribuicao do Valor Adicionado	379422000.0
+310	31/12/2024	26/02/2025	PETR4	7.08.01	Pessoal	44646000.0
+311	31/12/2024	26/02/2025	PETR4	7.08.01.01	Remuneracao Direta	24630000.0
+312	31/12/2024	26/02/2025	PETR4	7.08.01.02	Beneficios	18647000.0
+313	31/12/2024	26/02/2025	PETR4	7.08.01.03	F.G.T.S.	1369000.0
+314	31/12/2024	26/02/2025	PETR4	7.08.01.04	Outros	
+315	31/12/2024	26/02/2025	PETR4	7.08.02	Impostos, Taxas e Contribuicoes	190259000.0
+316	31/12/2024	26/02/2025	PETR4	7.08.02.01	Federais	126447000.0
+317	31/12/2024	26/02/2025	PETR4	7.08.02.02	Estaduais	63097000.0
+318	31/12/2024	26/02/2025	PETR4	7.08.02.03	Municipais	715000.0
+319	31/12/2024	26/02/2025	PETR4	7.08.03	Remuneracao de Capitais de Terceiros	107508000.0
+320	31/12/2024	26/02/2025	PETR4	7.08.03.01	Juros	101428000.0
+321	31/12/2024	26/02/2025	PETR4	7.08.03.02	Alugueis	6080000.0
+322	31/12/2024	26/02/2025	PETR4	7.08.03.03	Outras	
+323	31/12/2024	26/02/2025	PETR4	7.08.04	Remuneracao de Capitais Proprios	37009000.0
+324	31/12/2024	26/02/2025	PETR4	7.08.04.01	Juros sobre o Capital Proprio	22041000.0
+325	31/12/2024	26/02/2025	PETR4	7.08.04.02	Dividendos	14091000.0
+326	31/12/2024	26/02/2025	PETR4	7.08.04.03	Lucros Retidos / Prejuizo do Periodo	474000.0
+327	31/12/2024	26/02/2025	PETR4	7.08.04.04	Part. Nao Controladores nos Lucros Retidos	403000.0
+328	31/12/2024	26/02/2025	PETR4	7.08.05	Outros	
+329	31/12/2024	26/02/2025	PETR4	7.08.05.01	Valor adicionado total distribuido das operacoes descontinuadas	

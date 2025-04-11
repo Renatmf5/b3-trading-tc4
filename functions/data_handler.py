@@ -33,4 +33,4 @@ class DataHandler:
             self.scraping.fechar_driver()
             print("Scraping executado com sucesso.")
     
-    def cria_contabeis()
+    #def cria_contabeis()

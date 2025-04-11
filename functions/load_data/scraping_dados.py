@@ -52,6 +52,13 @@ class ScrapingResultados:
         """
         Processa a tabela detalhada na página redirecionada e retorna um DataFrame.
         """
+        def is_float(value):
+            try:
+                float(value)
+                return True
+            except ValueError:
+                return False
+        
         try:
             # Verificar se a tabela está dentro de um iframe
             iframes = self.driver.find_elements(By.TAG_NAME, "iframe")
@@ -90,7 +97,11 @@ class ScrapingResultados:
                 descricao = ' '.join(descricao.split())  # Remove espaços duplicados
                 
                 valor_primeiro_periodo = colunas[2].text.strip().replace(".", "").replace(",", ".").replace("\xa0", "")
-
+                
+                # Validar se o valor pode ser convertido em float
+                valor_convertido = float(valor_primeiro_periodo) if is_float(valor_primeiro_periodo) else 0
+                
+               
                 # Adicionar ao conjunto de dados
                 dados.append({
                     "data_doc": data_doc,
@@ -98,7 +109,7 @@ class ScrapingResultados:
                     "ticker": ticker,
                     "conta": conta,
                     "descricao": descricao,
-                    "valor_primeiro_periodo": float(valor_primeiro_periodo) if valor_primeiro_periodo else None
+                    "valor_primeiro_periodo": valor_convertido
                 })
 
             # Criar um DataFrame

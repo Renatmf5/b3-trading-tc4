@@ -114,7 +114,7 @@ class LoadDatasets:
             for ticker in batch_tickers:
                 print(f"Buscando dados para: {ticker}")
                 try:
-                    df_ticker = yf.download(f'{ticker}.SA', start="2014-01-01", auto_adjust=False, progress=False)
+                    df_ticker = yf.download(f'{ticker}.SA', start="2010-01-01", auto_adjust=False, progress=False)
                     if df_ticker.empty:
                         print(f"Sem dados para {ticker}")
                         continue
@@ -149,10 +149,9 @@ class LoadDatasets:
         df_final = pd.concat([pd.read_parquet(f) for f in all_files], ignore_index=True)
         df_final = df_final.sort_values('data', ascending=True)
         df_final['fator_ajuste'] = df_final['preco_fechamento_ajustado'] / df_final['close']
-        df_final['close'] = df_final['close'] * df_final['fator_ajuste']
-        df_final['open'] = df_final['open'] * df_final['fator_ajuste']
-        df_final['high'] = df_final['high'] * df_final['fator_ajuste']
-        df_final['low'] = df_final['low'] * df_final['fator_ajuste']
+        df_final['open_ajustado'] = df_final['open'] * df_final['fator_ajuste']
+        df_final['high_ajustado'] = df_final['high'] * df_final['fator_ajuste']
+        df_final['low_ajustado'] = df_final['low'] * df_final['fator_ajuste']
 
         df_final.to_parquet(output_path, index=False)
         print(f"Arquivo final salvo em: {output_path}")

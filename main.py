@@ -10,6 +10,8 @@ if __name__ == "__main__":
     # Carregar os datasets
     #handler.carregar_datasets()
     
+    """
+    """
     # Configurar e executar o scraping
     input_path = "dados/acoes/acoes_cotacoes.parquet"
     output_dir = "dados/indicadores/"

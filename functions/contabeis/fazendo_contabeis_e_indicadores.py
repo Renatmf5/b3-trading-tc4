@@ -45,10 +45,63 @@ def calcular_indicadores(input_path, cotacoes_path, output_path):
     
     df.rename(columns={'data_x': 'data'}, inplace=True)
 
+    def expandir_intervalos(df_indicador):
+        # Lista para armazenar os DataFrames expandidos
+        dfs_expandidos = []
+
+        # Iterar por cada ticker
+        for ticker, grupo in df_indicador.groupby('ticker'):
+            # Ordenar o grupo por data_envio
+            grupo = grupo.sort_values('data_envio')
+
+            # Lista para armazenar os registros expandidos do grupo
+            registros_expandidos = []
+
+            # Iterar por cada linha do grupo
+            for i in range(len(grupo) - 1):
+                linha_atual = grupo.iloc[i]
+                linha_proxima = grupo.iloc[i + 1]
+
+                # Gerar intervalo de datas diárias
+                intervalo_datas = pd.date_range(start=linha_atual['data_envio'], 
+                                                end=linha_proxima['data_envio'] - pd.Timedelta(days=1), 
+                                                freq='D')
+
+                # Criar registros para o intervalo
+                for data in intervalo_datas:
+                    registros_expandidos.append({
+                        'data': linha_atual['data'],
+                        'data_envio': data,
+                        'ticker': linha_atual['ticker'],
+                        'valor': linha_atual['valor']
+                    })
+
+            # Adicionar o último intervalo do grupo
+            ultima_linha = grupo.iloc[-1]
+            intervalo_final = pd.date_range(start=ultima_linha['data_envio'], 
+                                            end=ultima_linha['data_envio'] + pd.Timedelta(days=1), 
+                                            freq='D')
+            for data in intervalo_final:
+                registros_expandidos.append({
+                    'data': ultima_linha['data'],
+                    'data_envio': data,
+                    'ticker': ultima_linha['ticker'],
+                    'valor': ultima_linha['valor']
+                })
+
+            # Criar DataFrame expandido para o grupo
+            df_expandido = pd.DataFrame(registros_expandidos)
+            dfs_expandidos.append(df_expandido)
+
+        # Concatenar todos os DataFrames expandidos
+        df_resultado = pd.concat(dfs_expandidos, ignore_index=True)
+        return df_resultado
     # Função para salvar indicadores
     def salvar_indicador(df_indicador, nome_indicador):
         # Renomear a coluna do indicador para valor
         df_indicador.rename(columns={nome_indicador: 'valor'}, inplace=True)
+        
+        df_indicador = expandir_intervalos(df_indicador)
         
         output_file = os.path.join(output_dir, f"{nome_indicador}.parquet")
         df_indicador.to_parquet(output_file, index=False)
@@ -56,8 +109,20 @@ def calcular_indicadores(input_path, cotacoes_path, output_path):
 
     # Cálculo dos indicadores
     indicadores = pd.DataFrame()  # Inicializa como DataFrame vazio
-    indicadores = df[['data', 'data_envio', 'ticker','close']].drop_duplicates().copy()
+    indicadores = df[['data', 'data_envio', 'ticker','close', 'close_hist', 'qtd_acoes_total']].drop_duplicates().copy()
 
+    ############### Valor de Mercado
+
+    # Verifica se as colunas necessárias estão disponíveis
+    if 'close_hist' not in indicadores.columns or 'qtd_acoes_total' not in indicadores.columns:
+        print("Aviso: Dados insuficientes para calcular o Valor de Mercado. Continuando com valores nulos.")
+        indicadores['ValorMercado'] = None
+    else:
+        # Calcula o Valor de Mercado
+        indicadores['ValorMercado'] = indicadores['close_hist'] * indicadores['qtd_acoes_total']
+
+        # Trata valores nulos ou infinitos
+        indicadores['ValorMercado'] = indicadores['ValorMercado'].replace([float('inf'), -float('inf')], None)
 
     ############### EBIT
     df_ebit = df[df['conta'].isin(['3.03', '3.04'])].groupby(
@@ -163,7 +228,9 @@ def calcular_indicadores(input_path, cotacoes_path, output_path):
                             x.loc[x['conta'] == '1.01.01', 'valor_primeiro_periodo'].sum()
         })
     ).reset_index(drop=True)  # Reseta os índices para evitar problemas no merge
-
+    
+    
+        
     # Filtrar o Patrimônio Líquido (conta 2.03)
     df_patrimonio_liquido = df[df['conta'] == '2.03'][['data', 'data_envio', 'ticker', 'valor_primeiro_periodo']]
     df_patrimonio_liquido = df_patrimonio_liquido.rename(columns={'valor_primeiro_periodo': 'PatrimonioLiquido'})
@@ -192,7 +259,7 @@ def calcular_indicadores(input_path, cotacoes_path, output_path):
         indicadores['DividaLiquida_PatrimonioLiquido'] = indicadores['DividaLiquida'] / indicadores['PatrimonioLiquido']
         
         # Calcula Enterprise Value (EV)
-        indicadores['EV'] = indicadores['PatrimonioLiquido'] + indicadores['DividaLiquida']
+        indicadores['EV'] = indicadores['DividaLiquida'] + indicadores['ValorMercado']
         
         # Calcula o EBIT_EV
         indicadores['EBIT_EV'] = indicadores['EBIT'] / indicadores['EV']
@@ -292,16 +359,22 @@ def calcular_indicadores(input_path, cotacoes_path, output_path):
         indicadores['MargemEBITDA'] = indicadores['MargemEBITDA'].replace([float('inf'), -float('inf')], None)
         indicadores['MargemLiquida'] = indicadores['MargemLiquida'].replace([float('inf'), -float('inf')], None)
 
-    ############### ROE, ROA e ROIC
+    ############### ROE, ROA e ROIC e Lucro/Preço (L_P) , P_L , P_EBITDA e P_EBIT
 
     # Filtrar Patrimônio Líquido e Passivo Circulante
     df_passivo_circulante = df[df['conta'] == '2.01'][['data', 'data_envio', 'ticker', 'valor_primeiro_periodo']]
 
-    if df_patrimonio_liquido.empty or df_passivo_circulante.empty:
+    if df_patrimonio_liquido.empty or df_passivo_circulante.empty or df_lucro_liquido.empty or 'close_hist' not in indicadores.columns:
         print("Aviso: Dados insuficientes para calcular ROE, ROA e ROIC. Continuando com valores nulos.")
         indicadores['ROE'] = None
         indicadores['ROA'] = None
         indicadores['ROIC'] = None
+        indicadores['L_P'] = None
+        indicadores['VPA'] = None
+        indicadores['P_L'] = None
+        indicadores['P_EBIT'] = None
+        indicadores['P_EBITDA'] = None
+        
     else:
         # Junta os DataFrames necessários ao DataFrame de indicadores
         indicadores = indicadores.merge(
@@ -309,31 +382,161 @@ def calcular_indicadores(input_path, cotacoes_path, output_path):
             on=['data', 'data_envio', 'ticker'],
             how='left'
         )
+        # Calcula o Lucro por Ação
+        indicadores['LucroPorAcao'] = (indicadores['LucroLiquido']) * 4 / indicadores['qtd_acoes_total']
+        
+        indicadores['P_L'] = indicadores['close_hist'] / indicadores['LucroPorAcao']
+        
+        # Calcula Lucro/Preço (L/P)
+        indicadores['L_P'] = indicadores['LucroPorAcao'] / indicadores['close_hist']
+        
+        # Calcula Preço/Lucro (P/L) 
+        
+        # Calcula Preço/Ebitda (P/EBITDA)
+        indicadores['P_EBIT'] = indicadores['close_hist'] / indicadores['EBIT']
+        
+        # Calcula Preço/Ebitda (P/EBITDA)
+        indicadores['P_EBITDA'] = indicadores['close_hist'] / indicadores['EBITDA']
 
         # Calcula ROE
-        indicadores['ROE'] = indicadores['LucroLiquido'] / indicadores['PatrimonioLiquido']
+        indicadores['ROE'] = (indicadores['LucroLiquido']) * 4 / indicadores['PatrimonioLiquido']
 
         # Calcula ROA (AtivoTotal já existe em indicadores)
-        indicadores['ROA'] = indicadores['LucroLiquido'] / indicadores['AtivoTotal']
+        indicadores['ROA'] = (indicadores['LucroLiquido'] / indicadores['AtivoTotal']) * 4
 
         # Calcula ROIC
-        indicadores['ROIC'] = indicadores['LucroLiquido'] / (indicadores['AtivoTotal'] - indicadores['PassivoCirculante'])
+        indicadores['ROIC'] = (indicadores['LucroLiquido']) * 4 / (indicadores['AtivoTotal'] - indicadores['PassivoCirculante'])
 
         # Trata divisões por zero ou valores nulos
         indicadores['ROE'] = indicadores['ROE'].replace([float('inf'), -float('inf')], None)
         indicadores['ROA'] = indicadores['ROA'].replace([float('inf'), -float('inf')], None)
         indicadores['ROIC'] = indicadores['ROIC'].replace([float('inf'), -float('inf')], None)
-            
-        
-        
-        
-        # Verifica se df_ativo_total está vazio
-    if df_ativo_total.empty:
-        print("Aviso: O DataFrame 'Ativo Total' está vazio. Continuando com valores nulos para o indicador EBIT / Ativos.")
-        indicadores['EBIT_Ativos'] = None
+        indicadores['L_P'] = indicadores['L_P'].replace([float('inf'), -float('inf')], None)    
+        indicadores['P_L'] = indicadores['P_L'].replace([float('inf'), -float('inf')], None)
+        indicadores['P_EBIT'] = indicadores['P_EBIT'].replace([float('inf'), -float('inf')], None)
+        indicadores['P_EBITDA'] = indicadores['P_EBITDA'].replace([float('inf'), -float('inf')], None)
+                    
+      
+    ############# Cálculo do Capital de Giro e P/Capital de Giro +  P/Ativo Circulante Líquido
+
+    # Filtrar Ativo Circulante (conta 1.01)
+    df_ativo_circulante = df[df['conta'] == '1.01'][['data', 'data_envio', 'ticker', 'valor_primeiro_periodo']]
+    df_ativo_circulante.rename(columns={'valor_primeiro_periodo': 'AtivoCirculante'}, inplace=True)
+    
+    # Filtrar Passivo Não Circulante (conta 2.02)
+    df_passivo_nao_circulante = df[df['conta'] == '2.02'][['data', 'data_envio', 'ticker', 'valor_primeiro_periodo']]
+    df_passivo_nao_circulante.rename(columns={'valor_primeiro_periodo': 'PassivoNaoCirculante'}, inplace=True)
+
+    # Verifica se Ativo Circulante e Passivo Circulante estão disponíveis
+    if df_ativo_circulante.empty or df_passivo_circulante.empty or df_passivo_nao_circulante.empty:
+        print("Aviso: Dados insuficientes para calcular Capital de Giro. Continuando com valores nulos.")
+        indicadores['CapitalDeGiro'] = None
+        indicadores['P_Ativo'] = None
+        indicadores['P_AtivoCirculanteLiquido'] = None
     else:
-        # Junta o Ativo Total ao DataFrame de indicadores
-        indicadores = indicadores.merge(df_ativo_total, on=['data', 'data_envio', 'ticker'], how='left')
+        # Junta Ativo Circulante e Passivo Circulante ao DataFrame de indicadores
+        indicadores = indicadores.merge(df_ativo_circulante, on=['data', 'data_envio', 'ticker'], how='left')
+        indicadores = indicadores.merge(df_passivo_nao_circulante, on=['data', 'data_envio', 'ticker'], how='left')
+
+        # Calcula o Ativo Circulante Líquido (ACL)
+        indicadores['AtivoCirculanteLiquido'] = (
+            indicadores['AtivoCirculante'] - 
+            (indicadores['PassivoCirculante'] + indicadores['PassivoNaoCirculante'])
+        )
+
+        # Calcula o Ativo Circulante Líquido por Ação
+        indicadores['ACL_PorAcao'] = indicadores['AtivoCirculanteLiquido'] / indicadores['qtd_acoes_total']
+
+        # Calcula o indicador P/Ativo Circulante Líquido
+        indicadores['P_AtivoCirculanteLiquido'] = indicadores['close_hist'] / indicadores['ACL_PorAcao']
+
+        # Calcula Circulante liquido
+        indicadores['CapitalDeGiro'] = indicadores['AtivoCirculante'] - indicadores['PassivoCirculante']
+
+        # Calcula P/Circulante liquido
+        indicadores['P_CapitalDeGiro'] = indicadores['close_hist'] / (indicadores['CapitalDeGiro'] / indicadores['qtd_acoes_total'])
+        
+        # Calcula P_Ativos
+        indicadores['P_Ativos'] = indicadores['close_hist'] / (indicadores['AtivoTotal'] / indicadores['qtd_acoes_total'])
+
+        # Trata divisões por zero ou valores nulos
+        indicadores['CapitalDeGiro'] = indicadores['CapitalDeGiro'].replace([float('inf'), -float('inf')], None)
+        indicadores['P_CapitalDeGiro'] = indicadores['P_CapitalDeGiro'].replace([float('inf'), -float('inf')], None)
+        indicadores['P_Ativos'] = indicadores['P_Ativos'].replace([float('inf'), -float('inf')], None)
+        indicadores['P_AtivoCirculanteLiquido'] = indicadores['P_AtivoCirculanteLiquido'].replace([float('inf'), -float('inf')], None)
+        
+        
+    ############### VPA (Valor Patrimonial por Ação) e P/VPA (Preço/Valor Patrimonial por Ação)
+    
+    # Verifica se os DataFrames necessários estão disponíveis
+    if df_patrimonio_liquido.empty:
+        print("Aviso: Dados insuficientes para calcular VPA e P/VPA. Continuando com valores nulos.")
+        indicadores['VPA'] = None
+        indicadores['P_VPA'] = None
+        indicadores['PSR'] = None
+    else:
+        # Calcula a Receita Líquida por Ação
+        indicadores['ReceitaLiquidaPorAcao'] = indicadores['ReceitaLiquida'] / indicadores['qtd_acoes_total']
+
+        # Calcula o PSR (Preço sobre Receita)
+        indicadores['PSR'] = indicadores['close_hist'] / indicadores['ReceitaLiquidaPorAcao']
+
+        # Calcula o VPA (Valor Patrimonial por Ação)
+        indicadores['VPA'] = indicadores['PatrimonioLiquido'] / indicadores['qtd_acoes_total']
+
+        # Calcula o P/VPA (Preço/Valor Patrimonial por Ação)
+        indicadores['P_VPA'] = indicadores['close_hist'] / indicadores['VPA']
+
+        # Trata divisões por zero ou valores nulos
+        indicadores['VPA'] = indicadores['VPA'].replace([float('inf'), -float('inf')], None)
+        indicadores['P_VPA'] = indicadores['P_VPA'].replace([float('inf'), -float('inf')], None)
+        indicadores['ReceitaLiquidaPorAcao'] = indicadores['ReceitaLiquidaPorAcao'].replace([float('inf'), -float('inf')], None)
+        indicadores['PSR'] = indicadores['PSR'].replace([float('inf'), -float('inf')], None)
+        
+    
+    
+    ############# Cálculo do Dividend Yield (DY)
+
+    # Filtrar Dividendos pagos a acionistas controladores (6.03.05) e não controladores (6.03.06)
+    df_dividendos = df[df['conta'].isin(['7.08.04.01', '7.08.04.02'])][['data', 'data_envio', 'ticker', 'valor_primeiro_periodo']]
+
+    # Verificar se há dados de dividendos
+    if df_dividendos.empty:
+        print("Aviso: Dados insuficientes para calcular Dividend Yield (DY). Continuando com valores nulos.")
+        indicadores['DividendYield'] = None
+    else:
+        # Tornar os valores positivos (valor absoluto)
+        df_dividendos['valor_primeiro_periodo'] = df_dividendos['valor_primeiro_periodo'].abs()
+
+        # Agrupar por data, data_envio e ticker para somar os dividendos
+        df_dividendos_agrupados = df_dividendos.groupby(['data', 'data_envio', 'ticker'], as_index=False)['valor_primeiro_periodo'].sum()
+        df_dividendos_agrupados.rename(columns={'valor_primeiro_periodo': 'DividendosTotais'}, inplace=True)
+
+        # Verificar se a quantidade total de ações está disponível
+        if 'qtd_acoes_total' not in indicadores.columns:
+            print("Aviso: Quantidade total de ações não disponível. Não é possível calcular Dividendos por Ação.")
+            indicadores['DividendYield'] = None
+        else:
+            # Verificar se o preço da ação (close_hist) está disponível
+            if 'close_hist' not in indicadores.columns:
+                print("Aviso: Preço da Ação (close_hist) não disponível. Não é possível calcular o Dividend Yield (DY).")
+                indicadores['DividendYield'] = None
+            else:
+                # Mesclar os dividendos calculados ao DataFrame de indicadores
+                indicadores = indicadores.merge(df_dividendos_agrupados, on=['data', 'data_envio', 'ticker'], how='left')
+                
+                indicadores['DividendosPorAcao'] = indicadores['DividendosTotais'] / indicadores['qtd_acoes_total']
+
+                # Calcular o Dividend Yield (DY)
+                indicadores['DividendYield'] = (indicadores['DividendosPorAcao'] / indicadores['close_hist'])
+
+                # Tratar divisões por zero ou valores nulos
+                indicadores['DividendYield'] = indicadores['DividendYield'].replace([float('inf'), -float('inf')], None)
+
+
+    # Excluir colunas indesejadas
+    colunas_excluir = ['close', 'qtd_acoes_total', 'close_hist']
+    indicadores = indicadores.drop(columns=colunas_excluir, errors='ignore')        
         
 
     # Salvar todos os indicadores, exceto 'data', 'data_envio', 'ticker'
@@ -386,6 +589,8 @@ def separar_itens_contabeis(input_path, dados_path):
         'LucroLiquidoOperacoesDescontinuadas': '3.10',
         'LucroLiquido': '3.11',
         'LucroLiquidoSociosControladora': '3.11.01',
+        'JCP':'7.08.04.01',
+        'Dividendos':'7.08.04.02',
         'DepreciacaoAmortizacao': '7.04.01',
         'EquivalenciaPatrimonial': '3.04.06',
     }

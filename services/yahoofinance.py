@@ -7,6 +7,7 @@ COLS = {
     "data_pregao": (2, 10),
     "tipo_mercado": (24, 27),
     "codigo_acao": (12, 24),
+    'nome_empresa': (27, 39),
     "especificacao": (39, 41),
     "open": (56, 69),
     "high": (69, 82),
@@ -32,6 +33,7 @@ def parse_cotahist(filename):
         codigo_acao = line[COLS["codigo_acao"][0]:COLS["codigo_acao"][1]].strip()
         data_pregao = line[COLS["data_pregao"][0]:COLS["data_pregao"][1]]
         especificacao = line[COLS["especificacao"][0]:COLS["especificacao"][1]].strip()
+        nome_empresa = line[COLS["nome_empresa"][0]:COLS["nome_empresa"][1]].strip()
 
         # Filtrar AÇÕES PN (tipo_mercado == '010' e nome termina com 'PN')
         if tipo_mercado == "010" and (especificacao == "PN" or especificacao == "ON"):
@@ -39,6 +41,7 @@ def parse_cotahist(filename):
                 "data_pregao": data_pregao,
                 "codigo_acao": codigo_acao,
                 "especificacao": especificacao,
+                'nome_empresa': nome_empresa,
                 "open": int(line[COLS["open"][0]:COLS["open"][1]]) / 100,
                 "high": int(line[COLS["high"][0]:COLS["high"][1]]) / 100,
                 "low": int(line[COLS["low"][0]:COLS["low"][1]]) / 100,
@@ -73,31 +76,6 @@ def parse_cotahist(filename):
    
     return df_acoes_pn, df_opcoes
     
-def add_current_market_cap(df_acoes_pn):
-    # Criar uma lista para armazenar os dados de Market Cap
-    market_cap_data = []
-
-    # Iterar sobre os códigos de ação únicos no DataFrame
-    for codigo_acao in df_acoes_pn["codigo_acao"].unique():
-        ticker = f"{codigo_acao}.SA"  # Concatenar com .SA para ações brasileiras
-        try:
-            # Obter informações do Yahoo Finance
-            dados_yf = yf.Ticker(ticker).info
-            market_cap = dados_yf.get("marketCap")  # Buscar o Market Cap atual
-            
-            # Adicionar o Market Cap à lista
-            market_cap_data.append({"codigo_acao": codigo_acao, "market_cap": market_cap})
-        except Exception as e:
-            print(f"Erro ao obter Market Cap para {ticker}: {e}")
-            market_cap_data.append({"codigo_acao": codigo_acao, "market_cap": None})
-
-    # Criar um DataFrame com os dados de Market Cap
-    df_market_cap = pd.DataFrame(market_cap_data)
-
-    # Mesclar o DataFrame original com os dados de Market Cap
-    df_acoes_pn = pd.merge(df_acoes_pn, df_market_cap, on="codigo_acao", how="left")
-    
-    return df_acoes_pn
 # Exemplo de uso
 
 def process_all_files():
@@ -139,11 +117,7 @@ def process_all_files():
     
     # Filtrar ações com média de volume >= 100000
     codigos_validos = media_volume[media_volume["media_volume"] >= 100000]["codigo_acao"]
-    df_acoes_filtradas = df_acoes_consolidado[df_acoes_consolidado["codigo_acao"].isin(codigos_validos)]
-    
-    # Adicionar Market Cap ao DataFrame consolidado de ações
-    print("Adicionando Market Cap ao DataFrame consolidado de ações...")
-    df_acoes_final = add_current_market_cap(df_acoes_filtradas)
+    df_acoes_final = df_acoes_consolidado[df_acoes_consolidado["codigo_acao"].isin(codigos_validos)]
     
     # Identificar ações removidas
     acoes_removidas = df_acoes_consolidado[~df_acoes_consolidado["codigo_acao"].isin(codigos_validos)][["codigo_acao", "especificacao"]]

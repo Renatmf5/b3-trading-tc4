@@ -48,6 +48,63 @@ class ScrapingResultados:
             file.write(date + "\n")
         self.processed_dates.add(date)
         
+    def capturar_dados_empresa(self, data_doc, data_envio, ticker, df_tabela):
+        """
+        Captura os dados de "Dados da Empresa" e concatena com o DataFrame fornecido.
+        """
+        try:
+            # Selecionar a opção "Dados da Empresa" no select
+            select_element = WebDriverWait(self.driver, 10).until(
+                EC.presence_of_element_located((By.XPATH, '//*[@id="cmbGrupo"]'))
+            )
+            select = Select(select_element)
+            select.select_by_visible_text("Dados da Empresa")
+            time.sleep(3)  # Aguarde o carregamento da tabela
+
+             # Verificar se a tabela está dentro de um iframe
+            iframes = self.driver.find_elements(By.TAG_NAME, "iframe")
+            tabela = None
+            for iframe in iframes:
+                self.driver.switch_to.frame(iframe)
+                try:
+                    # Tentar localizar a tabela dentro do iframe
+                    tabela = WebDriverWait(self.driver, 20).until(
+                        EC.presence_of_element_located((By.XPATH, '//table[contains(@style, "border-left: 1px solid")]'))
+                    )
+                    if tabela:
+                        break  # Sair do loop se a tabela for encontrada
+                except:
+                    self.driver.switch_to.default_content()  # Voltar ao contexto principal se não encontrar
+            else:
+                # Se a tabela não for encontrada em nenhum iframe, lançar uma exceção
+                raise Exception("Tabela não encontrada em nenhum iframe.")
+
+            # Extrair os dados da tabela
+            dados = {
+                "ordinarias": tabela.find_element(By.ID, "QtdAordCapiItgz_1").text.strip().replace(".", "").replace(",", "."),
+                "preferenciais": tabela.find_element(By.ID, "QtdAprfCapiItgz_1").text.strip().replace(".", "").replace(",", "."),
+                "total": tabela.find_element(By.ID, "QtdTotAcaoCapiItgz_1").text.strip().replace(".", "").replace(",", ".")
+            }
+
+            # Criar um DataFrame com os dados capturados
+            df_empresa = pd.DataFrame([{
+                "data_doc": data_doc,
+                "data_envio": data_envio,
+                "ticker": ticker,
+                "qtd_acoes_on": float(dados["ordinarias"]),
+                "qtd_acoes_pn": float(dados["preferenciais"]),
+                "qtd_acoes_total": float(dados["total"])
+            }])
+
+            # Concatenar com o DataFrame fornecido
+            df_tabela = pd.merge(df_tabela, df_empresa, on=["data_doc", "data_envio", "ticker"], how="left")
+
+            return df_tabela
+
+        except Exception as e:
+            print(f"Erro ao capturar dados de 'Dados da Empresa': {e}")
+            return df_tabela
+        
     def processar_tabela_detalhada(self, data_doc, data_envio, ticker):
         """
         Processa a tabela detalhada na página redirecionada e retorna um DataFrame.
@@ -212,11 +269,15 @@ class ScrapingResultados:
                             "Demonstração de Valor Adicionado"
                         ]
 
+                        # Inicializar as variáveis antes do loop
+                        qtd_acoes_on = None
+                        qtd_acoes_pn = None
+                        qtd_acoes_total = None
                         # DataFrame final para a data atual
                         df_final = pd.DataFrame()
 
                         # Itera sobre as opções desejadas do select
-                        for opcao in opcoes:
+                        for i, opcao in enumerate(opcoes):
                             try:
                                 # Localizar o elemento <select> novamente após o postback
                                 select_element = WebDriverWait(self.driver, 10).until(
@@ -238,15 +299,34 @@ class ScrapingResultados:
                                 contas_relevantes = [
                                     '1', '1.01', '1.01.01', '1.02', '2', '2.01', '2.01.04', '2.02', '2.02.01', '2.03',
                                     '3.01', '3.02', '3.03', '3.04', '3.04.06', '3.06', '3.06.01', '3.06.02', '3.08',
-                                    '3.09', '3.10', '3.11', '3.11.01', '6.03.05', '6.03.06', '7.04.01'
+                                    '3.09', '3.10', '3.11', '3.11.01', '7.08.04.01', '7.08.04.02', '7.04.01'
                                 ]
                                 # Processar a tabela detalhada
                                 df_tabela = self.processar_tabela_detalhada(data_doc, data_envio, ticker)
                                 # filtrar df_tabela com contas_relevantes
                                 df_tabela = df_tabela[df_tabela['conta'].isin(contas_relevantes)]
 
+                                # Capturar os valores de ações na última iteração
+                                if i == len(opcoes) - 1:
+                                    if not df_tabela.empty:
+                                        df_tabela = self.capturar_dados_empresa(data_doc, data_envio, ticker, df_tabela)
+                                        # Preencher valores ausentes com o último valor válido
+                                        df_tabela[['qtd_acoes_on', 'qtd_acoes_pn', 'qtd_acoes_total']] = df_tabela[['qtd_acoes_on', 'qtd_acoes_pn', 'qtd_acoes_total']].ffill()
+
+                                        # Capturar os últimos valores preenchidos
+                                        qtd_acoes_on = df_tabela['qtd_acoes_on'].iloc[-1] if not df_tabela['qtd_acoes_on'].isna().all() else None
+                                        qtd_acoes_pn = df_tabela['qtd_acoes_pn'].iloc[-1] if not df_tabela['qtd_acoes_pn'].isna().all() else None
+                                        qtd_acoes_total = df_tabela['qtd_acoes_total'].iloc[-1] if not df_tabela['qtd_acoes_total'].isna().all() else None
+
                                 # Concatenar com o DataFrame final
                                 df_final = pd.concat([df_final, df_tabela], ignore_index=True)
+                                # Atualizar as linhas do df_final para o respectivo ticker e data_doc, se as variáveis de quantidade não forem None
+                                if qtd_acoes_on is not None and qtd_acoes_pn is not None and qtd_acoes_total is not None:
+                                    df_final.loc[
+                                        (df_final['ticker'] == ticker) & (df_final['data_doc'] == data_doc),
+                                        ['qtd_acoes_on', 'qtd_acoes_pn', 'qtd_acoes_total']
+                                    ] = [qtd_acoes_on, qtd_acoes_pn, qtd_acoes_total]
+                                
 
                             except Exception as e:
                                 print(f"Erro ao capturar dados na página redirecionada: {e}")

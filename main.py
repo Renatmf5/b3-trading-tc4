@@ -18,3 +18,5 @@ if __name__ == "__main__":
     indicadores = ['ebitda', 'roe', 'divida_bruta']
     handler.chama_scraping()
     
+    #handler.cria_indicares_tecnicos()
+    

@@ -107,7 +107,7 @@ def ajustar_quarto_trimestre(grupo):
 df_consolidado = df_consolidado.groupby(['ticker', 'conta'], group_keys=False).apply(ajustar_quarto_trimestre)
 
 # Aplicar abs para contas especificas
-contas_abs = ['3.02', '3.04', '3.06.02', '3.08','7.08.04.01', ' 7.08.04.02', '7.04.01']
+contas_abs = ['3.02', '3.04', '3.06.02', '3.08','7.08.04.01', '7.08.04.02', '7.04.01']
 for conta in contas_abs:
     df_consolidado.loc[df_consolidado['conta'] == conta, 'valor_primeiro_periodo'] = df_consolidado.loc[df_consolidado['conta'] == conta, 'valor_primeiro_periodo'].abs()
 

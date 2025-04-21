@@ -62,7 +62,7 @@ class LoadDatasets:
         if df_recent is not None and df_past is not None:
             df_cdi = pd.concat([df_past, df_recent], ignore_index=True)
             df_cdi = df_cdi.sort_values(by="data")
-            output_path = os.path.join(self.indicadores_dir, "cdi.parquet")
+            output_path = os.path.join(self.acoes_dir, "cdi.parquet")
             df_cdi.to_parquet(output_path, index=False)
             print(f"Dados do CDI salvos em {output_path}")
         else:
@@ -78,7 +78,12 @@ class LoadDatasets:
 
         try:
             df_ibovespa = yf.download(ticker, start=start_date.strftime('%Y-%m-%d'), end=end_date.strftime('%Y-%m-%d'))
-            df_ibovespa.reset_index(inplace=True)
+            df_ibovespa = df_ibovespa.reset_index()
+
+            # Verifica se as colunas são MultiIndex e ajusta
+            if isinstance(df_ibovespa.columns, pd.MultiIndex):
+                df_ibovespa.columns = df_ibovespa.columns.get_level_values(0)
+
             df_ibovespa['data'] = pd.to_datetime(df_ibovespa["Date"], format="%d/%m/%Y")
             df_ibovespa['indice'] = 'IBOV'
             df_ibovespa = df_ibovespa[['indice', 'data', 'Close']]
@@ -86,7 +91,7 @@ class LoadDatasets:
             df_ibovespa['fechamento'] = df_ibovespa['fechamento'].round(0).astype(int)
 
             if not df_ibovespa.empty:
-                output_path = os.path.join(self.indicadores_dir, "IBOV.parquet")
+                output_path = os.path.join(self.acoes_dir, "IBOV.parquet")
                 df_ibovespa.to_parquet(output_path, index=False)
                 print(f"Dados do Ibovespa salvos em {output_path}")
             else:

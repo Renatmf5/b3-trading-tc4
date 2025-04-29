@@ -236,15 +236,15 @@ if __name__ == "__main__":
                     'momento_6_meses': {'caracteristica': 'decrescente'},
                     
                 },
-                'peso': 1,
+                'peso': 0.5,
         },
-#        'carteira2': {
-#                'indicadores': {
-#                    'EBIT_EV': {'caracteristica': 'decrescente'},
-#                    'ValorDeMercado': {'caracteristica': 'crescente'},
-#                },
-#                'peso': 0.7,
-#        },
+        'carteira2': {
+                'indicadores': {
+                    'EBIT_EV': {'caracteristica': 'decrescente'},
+                    'ValorMercado': {'caracteristica': 'crescente'},
+                },
+                'peso': 0.5,
+        },
         }
     
     

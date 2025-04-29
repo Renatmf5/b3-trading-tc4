@@ -38,3 +38,5 @@ class DataHandler:
         self.indicators = MakeIndicators()
         
         self.indicators.fazendo_indicadores_tecnicos()
+        
+    

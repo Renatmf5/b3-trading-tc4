@@ -44,7 +44,7 @@ def calcular_indicadores(input_path, cotacoes_path, output_path):
     df_balancos['data_envio'] = pd.to_datetime(df_balancos['data_envio'], format='%d/%m/%Y')
     df_balancos['data'] = pd.to_datetime(df_balancos['data'], format='%d/%m/%Y')
     df_cotacoes['data'] = pd.to_datetime(df_cotacoes['data'], format='%Y-%m-%d')
-
+    
     # Renomear coluna de fechamento antes do merge
     df_cotacoes.rename(columns={'Close': 'preco'}, inplace=True)
 

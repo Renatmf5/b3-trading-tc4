@@ -2,6 +2,7 @@ import os
 import time
 import unicodedata
 import pandas as pd
+import yfinance as yf
 import math
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -382,14 +383,6 @@ class ScrapingResultados:
         df_consolidado = pd.concat([pd.read_parquet(batch_file) for batch_file in batch_files], ignore_index=True)
         df_consolidado.loc[df_consolidado['valor_primeiro_periodo'] == 0, 'valor_primeiro_periodo'] = None
 
-        # Multiplicar o valor de valor_primeiro_periodo para milhares * 1000
-
-        df_consolidado['valor_primeiro_periodo'] = df_consolidado['valor_primeiro_periodo'].apply(lambda x: x * 1000 if isinstance(x, (int, float)) else x)
-        # Multiplicar o valor de qtd_acoes_on qtd_acoes_pn e qtd_acoes_total para milhares * 1000
-        df_consolidado['qtd_acoes_on'] = df_consolidado['qtd_acoes_on'].apply(lambda x: x * 1000 if isinstance(x, (int, float)) else x)
-        df_consolidado['qtd_acoes_pn'] = df_consolidado['qtd_acoes_pn'].apply(lambda x: x * 1000 if isinstance(x, (int, float)) else x)
-        df_consolidado['qtd_acoes_total'] = df_consolidado['qtd_acoes_total'].apply(lambda x: x * 1000 if isinstance(x, (int, float)) else x)
-
 
 
         # Garantir que a coluna data_doc esteja no formato datetime
@@ -474,7 +467,7 @@ class ScrapingResultados:
         df_consolidado = df_consolidado.groupby(['ticker', 'conta'], group_keys=False).apply(ajustar_quarto_trimestre)
 
         # Aplicar abs para contas especificas
-        contas_abs = ['3.02', '3.04', '3.06.02', '3.08','7.08.04.01', ' 7.08.04.02', '7.04.01']
+        contas_abs = ['3.02', '3.04', '3.06.02', '3.08','7.08.04.01', '7.08.04.02', '7.04.01']
         for conta in contas_abs:
             df_consolidado.loc[df_consolidado['conta'] == conta, 'valor_primeiro_periodo'] = df_consolidado.loc[df_consolidado['conta'] == conta, 'valor_primeiro_periodo'].abs()
 
@@ -484,11 +477,115 @@ class ScrapingResultados:
         # Preencher valores ausentes com 0
         df_consolidado['valor_primeiro_periodo'].fillna(0, inplace=True)
 
+        # multiplicar por 1000 todos os valore de valor_primeiro_periodo o que for negativo continua negativo
+        df_consolidado['valor_primeiro_periodo'] = df_consolidado['valor_primeiro_periodo'].apply(lambda x: x * 1000 if pd.notnull(x) else x)
+
+        def processar_dados_yfinance(df_consolidado):
+            """
+            Processa os dados de cada ticker único no DataFrame consolidado usando a API do yfinance.
+            Associa corretamente a quantidade de ações (qtd_acoes) à data de envio (data_envio) usando join por intervalo.
+            """
+            tickers_unicos = df_consolidado['ticker'].unique()
+            historico_acoes = []
+
+            for ticker in tickers_unicos:
+                try:
+                    print(f"Processando dados para o ticker: {ticker}")
+                    ticker_yf = f"{ticker}.SA"
+                    yf_ticker = yf.Ticker(ticker_yf)
+
+                    marketcap = yf_ticker.info.get('marketCap', None)
+                    preco_acao = yf_ticker.history(period="1d")['Close'].iloc[-1] if not yf_ticker.history(period="1d").empty else None
+
+                    if marketcap is not None and preco_acao is not None and preco_acao > 0:
+                        qtd_total_acoes = marketcap / preco_acao
+                    else:
+                        qtd_total_acoes = None
+
+                    splits = yf_ticker.splits
+
+                    if not splits.empty:
+                        splits = splits.sort_index(ascending=True)  # Ordenar em ordem crescente
+                        qtd_acoes_atual = qtd_total_acoes
+                        historico = []
+
+                        # Processar os splits
+                        for data_split, proporcao_split in splits.items():
+                            if qtd_acoes_atual:
+                                qtd_acoes_atual *= proporcao_split
+                            data_split_limpo = pd.Timestamp(data_split).tz_localize(None).normalize()
+                            historico.append({'ticker': ticker, 'data_fim': data_split_limpo, 'qtd_acoes': qtd_acoes_atual})
+
+                        # Adicionar a data atual como o registro mais recente
+                        data_atual = pd.Timestamp.now().tz_localize(None).normalize()
+                        historico.append({'ticker': ticker, 'data_fim': data_atual, 'qtd_acoes': qtd_total_acoes})
+
+                        historico_acoes.extend(historico)
+
+                    else:
+                        # Sem splits, mas temos o marketcap atual — registrar só a data atual
+                        if qtd_total_acoes:
+                            data_atual = pd.Timestamp.now().tz_localize(None).normalize()
+                            historico_acoes.append({'ticker': ticker, 'data_fim': data_atual, 'qtd_acoes': qtd_total_acoes})
+
+                except Exception as e:
+                    print(f"Erro ao processar o ticker {ticker}: {e}", flush=True)
+
+            # Criar DataFrame com histórico de ações
+            df_historico_acoes = pd.DataFrame(historico_acoes)
+
+            if df_historico_acoes.empty:
+                print("Histórico de ações vazio. Encerrando.")
+                return df_consolidado
+
+            # Garantir normalização da data_envio
+            df_consolidado = df_consolidado.copy()
+            df_consolidado['data_envio'] = pd.to_datetime(df_consolidado['data_envio'], format='%d/%m/%Y').dt.normalize()
+            df_historico_acoes['data_fim'] = pd.to_datetime(df_historico_acoes['data_fim']).dt.normalize()
+
+            # Ordenar os DataFrames para uso no merge_asof
+            df_consolidado = df_consolidado.sort_values(by=['ticker', 'data_envio']).reset_index(drop=True)
+            df_historico_acoes = df_historico_acoes.sort_values(by=['ticker', 'data_fim']).reset_index(drop=True)
+
+            # Realizar o merge_asof para cada grupo de ticker
+            resultados = []
+            for ticker, grupo_consolidado in df_consolidado.groupby('ticker'):
+                grupo_historico = df_historico_acoes[df_historico_acoes['ticker'] == ticker]
+
+                # Aplicar merge_asof no grupo
+                grupo_resultado = pd.merge_asof(
+                    grupo_consolidado,
+                    grupo_historico,
+                    left_on='data_envio',
+                    right_on='data_fim',
+                    direction='forward'  # Busca a data mais próxima anterior ou igual
+                )
+                resultados.append(grupo_resultado)
+
+            # Concatenar os resultados
+            df_resultado = pd.concat(resultados, ignore_index=True)
+            # Preencher os valores de 'qtd_acoes' com ffill (caso necessário)
+            df_resultado = df_resultado[['data_doc','ticker_x', 'conta','valor_primeiro_periodo', 'data_envio', 'data_fim', 'qtd_acoes']]
+            df_resultado.rename(columns={'ticker_x': 'ticker','qtd_acoes':'qtd_acoes_total'}, inplace=True)
+
+
+            return df_resultado
+            
+
+
+
+        # Chamar a função ao final do processo
+        df_resultado = processar_dados_yfinance(df_consolidado)
+
+
+
+
+
         # Salvar o arquivo consolidado
-        consolidated_file = os.path.join("dados/balancos", "balancos_consolidados.parquet")
+
+        resultado_file = os.path.join("dados/balancos", "balancos_consolidados.parquet")
         df_ultimo_trimeste = os.path.join("dados/balancos", "balancos_consolidados12m.parquet")
-        df_consolidado.to_parquet(consolidated_file, index=False)
-        print(f"Arquivo consolidado salvo em {consolidated_file}.")
+        df_resultado.to_parquet(resultado_file, index=False)
 
 
     def fechar_driver(self):

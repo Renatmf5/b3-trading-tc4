@@ -10,7 +10,7 @@ import seaborn as sns
 import warnings
 from pandas.errors import SettingWithCopyWarning
 warnings.simplefilter(action="ignore", category=SettingWithCopyWarning)
-from report_pdf_carteiras import MakePDF
+from reports.report_pdf_carteiras import MakePDF
 import os
 
 
@@ -21,8 +21,8 @@ class MakeReportResult():
         self.df_trades = df_trades
         self.carteiras = df_carteiras
 
-        self.ibov = pd.read_parquet(os.path.join('.', 'dados', 'ibov.parquet'))
-        self.cdi = pd.read_parquet(os.path.join('.', 'dados', 'cdi.parquet'))
+        self.ibov = pd.read_parquet(os.path.join('.', 'dados', 'acoes', 'IBOV.parquet'))
+        self.cdi = pd.read_parquet(os.path.join('.', 'dados','acoes', 'cdi.parquet'))
         self.cdi['cota'] = (1 + self.cdi['retorno']).cumprod() - 1
         self.ibov['retorno'] = self.ibov['fechamento'].pct_change()
 
@@ -193,7 +193,7 @@ class MakeReportResult():
         self.maior_sequencia_derrotas = len(max((list(g) if k else [] for k, g in groupby(trades.tolist(), key=lambda i: i < 0)), key=len))
 
         ibov = self.ibov.copy()
-        ibov.columns = ['data', 'fechamento', 'retorno_ibov']
+        ibov.columns = ['indice', 'data', 'fechamento', 'retorno_ibov']
 
         df_trades_ibov = pd.merge(self.df_trades, ibov, on='data', how='inner')
 

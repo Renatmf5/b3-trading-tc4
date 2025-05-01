@@ -1,6 +1,10 @@
 import pandas as pd
 import os
 import yfinance as yf
+vol =  pd.read_parquet("dados/indicadores/vol_252.parquet")
+vol
+acoes_cotacoes = pd.read_parquet("dados/acoes/acoes_cotacoes.parquet")
+acoes_cotacoes
 
 batch_files = [
             os.path.join("dados/balancos", file)

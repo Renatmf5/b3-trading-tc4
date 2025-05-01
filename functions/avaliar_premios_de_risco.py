@@ -3,7 +3,7 @@ import numpy as np
 import mplcyberpunk 
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mtick
-from reports import MakePDF
+from reports.report_pdf_fatores import MakePDF
 import os
 import matplotlib
 matplotlib.rcParams.update({'font.size': 9})
@@ -198,21 +198,24 @@ if __name__ == "__main__":
                           'QUALITY_ROIC': 1000000,
                           'QUALITY_ROE': 1000000,
                           'QUALITY_ROIC_ROE': 1000000,
+                          'QUALITY_EBIT_ATIVO': 1000000,
                           'VALOR_EBIT_EV': 1000000,
                           'VALOR_L_P': 1000000,
+                          'VALOR_P_ACL': 1000000,
+                          'VALOR_P_VPA': 1000000,
+                          'VALOR_PSR': 1000000,
                           'ALAVANCAGEM_EBIT_DL': 1000000,
                           'ALAVANCAGEM_DL_EBITDA': 1000000,
                           'MOMENTO_R1M': 1000000,
                           'MOMENTO_R6M': 1000000,
                           'MOMENTO_R12M': 1000000,
                           'MOMENTO_MM_7_40': 1000000,
-                          'MOMENTO_R1M': 1000000,
-                          'MOMENTO_R6M': 1000000,
-                          'MOMENTO_R12M': 1000000,
-                          'TAMANHO_VALOR_DE_MERCADO': 1000000,
-                          #'RISCO_VOL_252': 1000000,
+                          #'TAMANHO_VALOR_DE_MERCADO': 1000000,
+                          'RISCO_VOL_252_AGRESSIVO': 1000000,
                           'RISCO_BETA_252_AGRESSIVO': 1000000,
-                          'RISCO_BETA_252_CONSERVADOR': 1000000
+                          'RISCO_BETA_252_CONSERVADOR': 1000000,
+                          'RISCO_BETA_756_AGRESSIVO': 1000000,
+                          'RISCO_BETA_756_CONSERVADOR': 1000000
                            }
 
     premios = MakeResultsPremium(data_final_analise="2022-12-31", dicionario_fatores=dicionario_fatores,     

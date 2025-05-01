@@ -15,8 +15,8 @@ class DataHandler:
         self.datasets_loader = LoadDatasets()
         print("Carregando datasets...")
         #self.datasets_loader.get_cdi_last_15_years()
-        self.datasets_loader.get_ibovespa_last_15_years()
-        #self.datasets_loader.atualizar_acoes_consolidado()
+        #self.datasets_loader.get_ibovespa_last_15_years()
+        self.datasets_loader.atualizar_acoes_consolidado()
         print("Datasets carregados com sucesso.")
         return True
 

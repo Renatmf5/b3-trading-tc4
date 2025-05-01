@@ -143,8 +143,8 @@ class MakeIndicators:
         Função principal que chama todas as funções para calcular os indicadores técnicos.
         """
         self.load_data()
-        self.calcular_beta(anos=1)  # Exemplo: Beta de 3 ano
-        #self.volatilidade(anos=1)
+        #self.calcular_beta(anos=1)  # Exemplo: Beta de 3 ano
+        self.volatilidade(anos=1)
         #self.volume_mediano()
         #self.media_movel_proporcao(mm_curta=7, mm_longa=40)
         #self.fazer_indicador_momento(meses=12)

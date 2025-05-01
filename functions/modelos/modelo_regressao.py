@@ -92,10 +92,11 @@ class linear_regression():
 if __name__ == "__main__":
 
     dicionario_fatores = { 
-                          'MOMENTO_MM_7_40': 1000000,  
-                          'TAMANHO_VALOR_DE_MERCADO': 1000000,
-                          'VALOR_EBIT_EV': 1000000,
+                          'MOMENTO_R6M': 1000000,  
+                          'VALOR_PSR': 1000000,
+                          'QUALITY_EBIT_ATIVO': 1000000,
                           'ALAVANCAGEM_EBIT_DL': 1000000,
+                          'RISCO_BETA_252_CONSERVADOR': 1000000,
                            }
 
     fazendo_modelo = linear_regression(data_final_analise= "2022-12-31", dicionario_fatores = dicionario_fatores

@@ -20,7 +20,7 @@ class premio_risco:
 
     def pegando_datas_possiveis(self):
 
-        cot_petr = self.cotacoes[self.cotacoes['ticker'] == 'ABEV3']
+        cot_petr = self.cotacoes[self.cotacoes['ticker'] == 'PETR4']
 
         cot_petr = cot_petr.sort_values('data', ascending = True)
         cot_petr = cot_petr.assign(year = pd.DatetimeIndex(cot_petr['data']).year)
@@ -55,7 +55,7 @@ class premio_risco:
         datas = []
         for df in self.df_indicadores:
             indicador_sem_na = df.dropna()
-            petr_indicador = indicador_sem_na.query('ticker == "ALPA4"') #eu usei a PETR como parametro pra saber a primeira data de qlqr indicador.
+            petr_indicador = indicador_sem_na.query('ticker == "PETR4"') #eu usei a PETR como parametro pra saber a primeira data de qlqr indicador.
             data_minima = min(petr_indicador['data'])
             datas.append(data_minima)
         data_minima_geral = max(datas)  #maximo porque queremos a MAIOR data mínima entre os indicadores.
@@ -136,10 +136,10 @@ class premio_risco:
 
 if __name__ == "__main__":
 
-    indicadores_dict = {'ValorMercado': 'crescente'
+    indicadores_dict = {'vol_252': 'decrescente',
                         }
                         
-    premio = premio_risco(indicadores_dict,  liquidez = 1000000, nome_premio = 'TAMANHO_VALOR_DE_MERCADO', 
+    premio = premio_risco(indicadores_dict,  liquidez = 1000000, nome_premio = 'RISCO_VOL_252_AGRESSIVO', 
                         ) #não pode ter \ no nome!!
 
     premio.pegando_dados_cotacoes()

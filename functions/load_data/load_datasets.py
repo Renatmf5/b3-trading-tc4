@@ -142,12 +142,11 @@ class LoadDatasets:
                         'High': 'high',
                         'Low': 'low',
                         'Open': 'open',
-                        'Volume': 'volume'
                     })
 
                     df_ticker['ticker'] = ticker
                     df_ticker = df_ticker[['data', 'ticker', 'preco_fechamento_ajustado',
-                                           'close', 'high', 'low', 'open', 'volume']]
+                                           'close', 'high', 'low', 'open']]
                     df_historico = pd.concat([df_historico, df_ticker], ignore_index=True)
                 except Exception as e:
                     print(f"Erro ao buscar {ticker}: {e}")
@@ -177,7 +176,7 @@ class LoadDatasets:
 
         # Realizar o join com base em 'ticker' e 'data'
         df_final = df_final.merge(
-            df_consolidado[['data_pregao', 'codigo_acao', 'open_hist', 'high_hist', 'low_hist', 'close_hist']],
+            df_consolidado[['data_pregao', 'codigo_acao', 'open_hist', 'high_hist', 'low_hist', 'close_hist', 'volume']],
             left_on=['data', 'ticker'],
             right_on=['data_pregao', 'codigo_acao'],
             how='left'

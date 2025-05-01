@@ -58,8 +58,19 @@ class DataAnalitcsHandler:
                 lendo_indicador['data'] = pd.to_datetime(lendo_indicador['data']).dt.date
                 lendo_indicador['ticker'] = lendo_indicador['ticker'].astype(str)
                 lendo_indicador['valor'] = lendo_indicador['valor'].astype(float)
-                lendo_indicador = lendo_indicador[['data', 'ticker', 'valor']]
-                lendo_indicador.columns = ['data', 'ticker', indicador]
+                
+                # Ordenar por ticker e data crescente
+                lendo_indicador = lendo_indicador.sort_values(by=['ticker', 'data'])
+                
+                # Calcular a variação entre trimestres
+                lendo_indicador['variacao'] = lendo_indicador.groupby('ticker')['valor'].pct_change()
+                # Substituir valores 0.0 por NaN
+                lendo_indicador['variacao'] = lendo_indicador['variacao'].replace(0.0, pd.NA)
+                lendo_indicador['variacao'] = lendo_indicador.groupby('ticker')['variacao'].fillna(method='ffill')
+
+                # Selecionar as colunas finais
+                lendo_indicador = lendo_indicador[['data', 'ticker', 'valor', 'variacao']]
+                lendo_indicador.columns = ['data', 'ticker', indicador, f'{indicador}_variacao']
                 lista_dfs.append(lendo_indicador)
 
         df_dados = lista_dfs[0]
@@ -85,14 +96,16 @@ class DataAnalitcsHandler:
 
             return grupo
         
+        self.df_dados = self.df_dados.sort_values(by=['ticker', 'data'])
+        
         # Aplicar a função para cada grupo de 'ticker'
-        self.df_dados = self.df_dados.groupby('ticker').apply(calcula_signal_target)
+        self.df_dados = self.df_dados.groupby('ticker', group_keys=False).apply(calcula_signal_target)
         
         # Remover a coluna temporária 'preco_fechamento_futuro'
         self.df_dados = self.df_dados.drop(columns=['preco_fechamento_futuro'])
 
         
-        return self.df
+        return self.df_dados
     
     def BacktestOtimizado(self):
         
@@ -199,13 +212,13 @@ if __name__ == "__main__":
     
     dicionario_indicadores = {
             'indicadores': {
-                'momento_6_meses',
                 'momento_1_meses',
-                'L_P',
-                'P_VPA',
-                'ROA',
-                'P_Ativos'
-                
+                'momento_6_meses',
+                'mm_7_40',
+                'ebit_dl',
+                'PSR',
+                'beta_252',
+                'EBIT_Ativos'
             }
         }
     

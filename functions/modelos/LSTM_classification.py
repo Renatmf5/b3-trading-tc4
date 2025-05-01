@@ -21,7 +21,7 @@ class LSTMClassificationModel:
     def train_lstm_classification(self, train_data):
         # Normalizar os dados
         scaler = MinMaxScaler(feature_range=(0, 1))
-        scaled_data = scaler.fit_transform(train_data.drop(columns=['signal', 'target']))
+        scaled_data = scaler.fit_transform(train_data.drop(columns=['data','ticker','signal', 'target']))
 
         # Salvar o scaler
         joblib.dump(scaler, self.scaler_path)

@@ -1,9 +1,12 @@
 import os
 import pandas as pd
+import numpy as np
+import boto3
+import json
 from indicadores import *
 from datetime import timedelta
-from modelos import LSTMClassificationModel
-from sklearn.metrics import accuracy_score, classification_report
+from modelos import LSTMClassificationModel, LSTMRegressionModel
+from sklearn.metrics import accuracy_score, classification_report, mean_absolute_error, mean_squared_error
 
 class DataAnalitcsHandler:
     def __init__(self, **kargs):
@@ -86,7 +89,7 @@ class DataAnalitcsHandler:
         # Função para calcular 'signal' e 'target' para cada grupo de 'ticker'
         def calcula_signal_target(grupo):
             # Deslocar o preço de fechamento ajustado em 21 dias (1 mês útil)
-            grupo['preco_fechamento_futuro'] = grupo['preco_fechamento_ajustado'].shift(-21)
+            grupo['preco_fechamento_futuro'] = grupo['preco_fechamento_ajustado'].shift(-1)
 
             # Calcular a coluna 'signal'
             grupo['signal'] = (grupo['preco_fechamento_futuro'] > grupo['preco_fechamento_ajustado']).astype(int)
@@ -109,41 +112,64 @@ class DataAnalitcsHandler:
     
     def BacktestOtimizado(self):
         
-        def execute_model_trainer(train_data, test_data, ticker):
+        def execute_model_trainer(train_data, test_data, ticker, start_date_test, is_last_loop=False):
             """
             Treina o modelo e realiza predições com base nos dados de treinamento e teste.
             """
             # Trata LSTM
-           
-            self.LSTM_model = LSTMClassificationModel(ticker, self.bucket_name)
+            self.LSTM_model = LSTMClassificationModel(ticker, self.bucket_name, is_last_loop=is_last_loop)
+            self.LSTM_regression_model = LSTMRegressionModel(ticker, self.bucket_name, is_last_loop=is_last_loop)
 
             scaler_LSTM = self.LSTM_model.train_lstm_classification(train_data)
+            scaler_LSTM_regression = self.LSTM_regression_model.train_lstm_regression(train_data)
             
-            test_predictions = self.LSTM_model.predict_lstm_classification(test_data, scaler_LSTM)
+            # Usar os últimos 21 dias do treino como entrada para prever os próximos 21 dias
+            X_test = train_data.iloc[-21:]  # Últimos 21 dias do treino
+            X_test2 = test_data.iloc[:21]
+            y_test_classification = test_data.iloc[:21]['signal']  # Primeiros 21 dias do teste (coluna 'signal')
             
-            # Calcular a acurácia para os dados de treino
-            train_predictions = self.LSTM_model.predict_lstm_classification(train_data, scaler_LSTM)
-            train_accuracy = accuracy_score(train_data['signal'], train_predictions)
+            # Concatenar os dois DataFrames
+            test_consolidado = pd.concat([X_test, X_test2], axis=0)
 
-            # Calcular a acurácia para os dados de teste
-            test_accuracy = accuracy_score(test_data['signal'], (test_predictions > 0.5).astype(int))
+            # Fazer predições com o modelo de classificação
+            predictions_classification = self.LSTM_model.predict_lstm_classification(test_consolidado, scaler_LSTM)
+            binary_predictions = (predictions_classification > 0.5).astype(int)
 
-            # Criar um DataFrame com as métricas
+            # Calcular métricas de classificação
+            classification_report_metrics = classification_report(y_test_classification, binary_predictions, output_dict=True)
+            test_accuracy = accuracy_score(y_test_classification, binary_predictions)
+
+            print("Relatório de Classificação para teste LSTM:")
+            print(classification_report(y_test_classification, binary_predictions))
+            
+            # Fazer predições com o modelo de regressão
+            predictions_regression = self.LSTM_regression_model.predict_lstm_regression(test_consolidado, scaler_LSTM_regression)
+            y_test_regression = test_data.iloc[:21]['target']  # Primeiros 21 dias do teste (coluna 'target')
+            
+            mae = mean_absolute_error(y_test_regression, predictions_regression)
+            rmse = np.sqrt(mean_squared_error(y_test_regression, predictions_regression))
+
+            print("Métricas de Regressão:")
+            print(f"MAE: {mae}")
+            print(f"RMSE: {rmse}")
+
+
+            # Criar um DataFrame com as métricas combinadas
             metrics_df = pd.DataFrame({
                 'ticker': [ticker],
-                'train_accuracy': [train_accuracy],
-                'test_accuracy': [test_accuracy]
+                'periodo_teste': [start_date_test],
+                'test_accuracy_classification': [test_accuracy],
+                'mae_regression': [mae],
+                'rmse_regression': [rmse]
             })
-            print("Relatório de Classificação para teste LSTM:")
-            print(classification_report(test_data['signal'], (test_predictions > 0.5).astype(int)))
-            
+
             return metrics_df
         
         self.df_dados['data'] = pd.to_datetime(self.df_dados['data'])
         self.df_dados = self.df_dados.sort_values(by=['ticker','data'])
         
         # Agrupar o DataFrame por 'ticker'
-        tickers = self.df_dados['ticker'].unique()
+        tickers = ['AALR3','PETR4']#self.df_dados['ticker'].unique()
         all_results = []
 
         for ticker in tickers:
@@ -152,18 +178,20 @@ class DataAnalitcsHandler:
             # Filtrar os dados para o ticker atual
             df_ticker = self.df_dados[self.df_dados['ticker'] == ticker]
 
-            # Definir o início e o fim do período de treinamento inicial (2 Anos)
+            # Definir o período de treinamento (data mínima até 90 dias antes da data máxima)
             start_date = df_ticker['data'].min()
-            end_date_train = start_date + timedelta(days=365 * 2)
+            end_date_train = df_ticker['data'].max() - timedelta(days=90)
 
-            # Definir o início do período de teste (1 mês após o período de treinamento)
+            # Definir o período de teste (últimos 90 dias, divididos em 3 períodos de 30 dias)
             start_date_test = end_date_train
             end_date_test = start_date_test + timedelta(days=30)
 
             results = []
 
-            # Executar o backtest até o último período possível
-            while not df_ticker[(df_ticker['data'] >= start_date_test) & (df_ticker['data'] < end_date_test)].empty:
+            # Executar o backtest em no máximo 3 períodos de teste
+            for i in range(3):
+                is_last_loop = (i == 2)
+                
                 # Filtrar os dados de treinamento e teste
                 train_data = df_ticker[(df_ticker['data'] >= start_date) & (df_ticker['data'] < end_date_train)]
                 test_data = df_ticker[(df_ticker['data'] >= start_date_test) & (df_ticker['data'] < end_date_test)]
@@ -172,12 +200,7 @@ class DataAnalitcsHandler:
                     break
 
                 # Executar o treinamento e a predição
-                metrics_df = execute_model_trainer(train_data, test_data, ticker)
-
-                # Adicionar colunas de período de teste ao DataFrame de métricas
-                metrics_df['start_time'] = start_date_test
-                metrics_df['end_time'] = end_date_test
-                metrics_df['ticker'] = ticker  # Adicionar o ticker atual
+                metrics_df = execute_model_trainer(train_data, test_data, ticker, start_date_test, is_last_loop)
 
                 # Verificar se metrics_df é bidimensional
                 if metrics_df.ndim == 2:
@@ -185,9 +208,10 @@ class DataAnalitcsHandler:
                     results.append(metrics_df)
                 else:
                     print(f"metrics_df não é bidimensional: {metrics_df.shape}")
+                    # Concatenar mesmo assim
+                    all_results.append(metrics_df)
 
-                # Atualizar as datas para a próxima iteração
-                end_date_train += timedelta(days=30)
+                # Atualizar as datas para o próximo período de teste
                 start_date_test += timedelta(days=30)
                 end_date_test += timedelta(days=30)
 
@@ -204,9 +228,38 @@ class DataAnalitcsHandler:
             print(final_results_df)
         else:
             print("Nenhum resultado para concatenar.")
+            return None
 
-        return final_results_df if all_results else None
-            
+        # Converter o DataFrame final em JSON estruturado
+        backtests_results = final_results_df.groupby('ticker').apply(
+            lambda x: x.to_dict(orient='records')
+        ).to_dict()
+        
+        # Converter objetos Timestamp para strings no JSON
+        def convert_timestamps(obj):
+            if isinstance(obj, pd.Timestamp):
+                return obj.strftime('%Y-%m-%d')  # Formato de data como string
+            elif isinstance(obj, dict):
+                return {k: convert_timestamps(v) for k, v in obj.items()}
+            elif isinstance(obj, list):
+                return [convert_timestamps(i) for i in obj]
+            else:
+                return obj
+
+        backtests_results = convert_timestamps(backtests_results)
+
+        # Salvar o JSON localmente
+        json_path = os.path.join('.', 'dados', 'dataModels', 'backtests_results.json')
+        with open(json_path, 'w') as json_file:
+            json.dump(backtests_results, json_file, indent=4)
+
+        # Enviar o JSON para o Amazon S3
+        s3_client = boto3.client('s3')
+        s3_client.upload_file(json_path, self.bucket_name, 'backtests_results.json')
+        print(f"JSON enviado para o S3: s3://{self.bucket_name}/backtests_results.json")
+
+        return backtests_results
+                    
 
 if __name__ == "__main__":
     
@@ -215,10 +268,7 @@ if __name__ == "__main__":
                 'momento_1_meses',
                 'momento_6_meses',
                 'mm_7_40',
-                'ebit_dl',
-                'PSR',
-                'beta_252',
-                'EBIT_Ativos'
+                'RSI_14',
             }
         }
     

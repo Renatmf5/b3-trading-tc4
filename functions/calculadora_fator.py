@@ -240,8 +240,10 @@ if __name__ == "__main__":
         },
         'carteira2': {
                 'indicadores': {
-                    'EBIT_EV': {'caracteristica': 'decrescente'},
-                    'ValorMercado': {'caracteristica': 'crescente'},
+                    'PSR': {'caracteristica': 'decrescente'},
+                    'EBIT_Ativos': {'caracteristica': 'decrescente'},
+                    'ebit_dl': {'caracteristica': 'decrescente'},
+                    'beta_252': {'caracteristica': 'crescente'}                
                 },
                 'peso': 0.5,
         },

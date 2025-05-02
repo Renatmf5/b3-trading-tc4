@@ -109,24 +109,16 @@ class MakeIndicators:
         
         self.save_data(valor,f'vol_{int(252 * anos)}.parquet')
 
-    def calcular_sma(self, periodos):
-        """
-        Calcula a Média Móvel Simples (SMA) para os períodos especificados.
-        """
-        for periodo in periodos:
-            self.cotacoes[f'SMA_{periodo}'] = self.cotacoes['Close'].rolling(window=periodo).mean()
-            self.save_data(self.cotacoes[['data', 'ticker', f'SMA_{periodo}']], f'SMA_{periodo}.parquet')
-
     def calcular_rsi(self, periodo=14):
         """
         Calcula o Índice de Força Relativa (RSI).
         """
-        delta = self.cotacoes['Close'].diff(1)
+        delta = self.cotacoes['preco_fechamento_ajustado'].diff(1)
         gain = (delta.where(delta > 0, 0)).rolling(window=periodo).mean()
         loss = (-delta.where(delta < 0, 0)).rolling(window=periodo).mean()
         rs = gain / loss
-        self.cotacoes['RSI'] = 100 - (100 / (1 + rs))
-        self.save_data(self.cotacoes[['data', 'ticker', 'RSI']], 'RSI.parquet')
+        self.cotacoes['valor'] = 100 - (100 / (1 + rs))
+        self.save_data(self.cotacoes[['data', 'ticker', 'valor']], f'RSI_{periodo}.parquet')
 
     def fazer_indicador_momento(self, meses):
 
@@ -144,7 +136,8 @@ class MakeIndicators:
         """
         self.load_data()
         #self.calcular_beta(anos=1)  # Exemplo: Beta de 3 ano
-        self.volatilidade(anos=1)
+        #self.volatilidade(anos=1)
+        self.calcular_rsi()
         #self.volume_mediano()
         #self.media_movel_proporcao(mm_curta=7, mm_longa=40)
         #self.fazer_indicador_momento(meses=12)
